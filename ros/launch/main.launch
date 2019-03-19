@@ -6,7 +6,7 @@
 
   <!-- start world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-   <arg name="world_name" value="$(find exercises)/part1/ros/worlds/simple.world"/>
+   <arg name="world_name" value="$(find turtlebot3_formation)/ros/worlds/simple.world"/>
    <arg name="paused" value="true"/>
    <arg name="use_sim_time" value="true"/>
    <arg name="gui" value="$(arg use_gui)"/>
@@ -15,7 +15,7 @@
   </include>
   
   <!-- include our robots -->
-  <include file="$(find exercises)/part3/ros/launch/formation.launch"/>
+  <include file="$(find turtlebot3_formation)/ros/launch/formation.launch"/>
 
   <!-- Navigation is kept separately -->
 </launch>
