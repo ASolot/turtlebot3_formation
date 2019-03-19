@@ -1,52 +1,43 @@
 <launch>
-  <!-- No namespace here as we will share this description. 
-       Access with slash at the beginning -->
 
-  <!-- OLD ROBOT DESCRIPTION 
-  <param name="robot_description"
-    command="$(find xacro)/xacro.py $(find turtlebot_description)/robots/kobuki_hexagons_asus_xtion_pro.urdf.xacro" />
-  --> 
-  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="Robot_0" default="tb3_0"/>
+  <arg name="Robot_1" default="tb3_1"/>
+  <arg name="Robot_2" default="tb3_2"/>
+
+
+  <!-- BEGIN ROBOT 0-->
+  <group ns="$(arg Robot_0)">
+    <include file="$(find turtlebot3_formation)/ros/launch/robot.launch" >
+      <arg name="model"       value="burger" doc="model type [burger, waffle, waffle_pi]"/>
+      <arg name="x_pos"       value="-1.0"/>
+      <arg name="y_pos"       value="-1.0"/>
+      <arg name="z_pos"       value="0.0"/>
+      <arg name="role"        value="human_follower"/>
+      <arg name="tf_prefix"   value="$(arg Robot_0)" />
+    </include>
+  </group>
 
   <!-- BEGIN ROBOT 1-->
-  <group ns="robot1">
-    <param name="tf_prefix" value="robot1_tf" />
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  <group ns="$(arg Robot_1)">
     <include file="$(find turtlebot3_formation)/ros/launch/robot.launch" >
-      <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
-      <arg name="x_pos" default="-1.0"/>
-      <arg name="y_pos" default="-1.0"/>
-      <arg name="z_pos" default="0.0"/>
-      <arg name="robot_name"  value="Robot1" />
-      <arg name="role" value="human_follower"/>
+      <arg name="model"       value="burger" doc="model type [burger, waffle, waffle_pi]"/>
+      <arg name="x_pos"       value="-1.3"/>
+      <arg name="y_pos"       value="-1.0"/>
+      <arg name="z_pos"       value="0.0"/>    
+      <arg name="role"        value="turtle_follower"/>
+      <arg name="tf_prefix"   value="$(arg Robot_1)" />
     </include>
   </group>
 
   <!-- BEGIN ROBOT 2-->
-  <group ns="robot2">
-    <param name="tf_prefix" value="robot2_tf" />
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+  <group ns="$(arg Robot_2)">
     <include file="$(find turtlebot3_formation)/ros/launch/robot.launch" >
-      <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
-      <arg name="x_pos" default="-1.3"/>
-      <arg name="y_pos" default="-1.0"/>
-      <arg name="z_pos" default="0.0"/>    
-      <arg name="robot_name"  value="Robot2" />
-      <arg name="role" value="turtle_follower"/>
-    </include>
-  </group>
-
-  <!-- BEGIN ROBOT 3-->
-  <group ns="robot3">
-    <param name="tf_prefix" value="robot3_tf" />
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
-    <include file="$(find turtlebot3_formation)/ros/launch/robot.launch" >
-      <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
-      <arg name="x_pos" default="-1.6"/>
-      <arg name="y_pos" default="-1.0"/>
-      <arg name="z_pos" default="0.0"/>    
-      <arg name="robot_name"  value="Robot3" />
-      <arg name="role" value="turtle_follower"/>
+      <arg name="model"       value="burger" doc="model type [burger, waffle, waffle_pi]"/>
+      <arg name="x_pos"       value="-1.6"/>
+      <arg name="y_pos"       value="-1.0"/>
+      <arg name="z_pos"       value="0.0"/>    
+      <arg name="role"        value="turtle_follower"/>
+      <arg name="tf_prefix"   value="$(arg Robot_2)" />
     </include>
   </group>
   

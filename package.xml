@@ -85,6 +85,7 @@
   <depend>turtlebot3</depend>
   <depend>turtlebot3_msgs</depend>
   <depend>turtlebot3_simulations</depend>
+  <depend>multirobot_map_merge</depend>
 
   <exec_depend>gazebo</exec_depend>
   <export>

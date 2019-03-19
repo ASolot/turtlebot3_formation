@@ -1,0 +1,30 @@
+<launch>
+
+  <!-- Start slam -->
+  <include file="$(find turtlebot3_gazebo)/launch/multi_turtlebot3_slam.launch">
+    <arg name="ns" value="tb3_0"/>
+  </include>
+  
+  <include file="$(find turtlebot3_gazebo)/launch/multi_turtlebot3_slam.launch">
+    <arg name="ns" value="tb3_1"/>
+  </include>
+  
+  <include file="$(find turtlebot3_gazebo)/launch/multi_turtlebot3_slam.launch">
+    <arg name="ns" value="tb3_2"/>
+  </include>
+
+  <!-- Merge maps -->
+  <include file="$(find turtlebot3_gazebo)/launch/multi_map_merge.launch">
+    <param name="known_init_poses" value="false"/>
+  </include>
+
+  <!-- 
+       Default -Open rViz config to true for local rviz client. 
+       Allows override to disable it for RoboMaker. See hello_world_aws.launch. 
+  -->
+  <arg name="open_rviz_config" default="true"/>
+  <group if="$(arg open_rviz_config)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_formation)/ros/rviz/turtlebot3_formation_slam.rviz"/>
+  </group>
+
+</launch>

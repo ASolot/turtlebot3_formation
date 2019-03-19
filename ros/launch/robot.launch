@@ -3,34 +3,19 @@
   <arg name="x_pos"/>
   <arg name="y_pos"/>
   <arg name="z_pos"/>
-  <arg name="robot_name"/>
   <arg name="role"/>
+  <arg name="tf_prefix"/>
   
 
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model turtlebot3_$(arg robot_name) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
- 
-  <!-- OLD 
-  <node name="spawn_minibot_model" pkg="gazebo_ros" type="spawn_model"
-   args="$(arg init_pose) -urdf -param /robot_description -model $(arg robot_name)"
-   respawn="false" output="screen" />
-   <node pkg="robot_state_publisher" type="state_publisher" 
-          name="robot_state_publisher" output="screen"/>
-  -->
-
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
 
   <!-- TurtleBot3 -->
-  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
-    <arg name="model" value="$(arg model)" />
-  </include>
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
     <param name="publish_frequency" type="double" value="50.0" />
-    <!-- <param name="tf_prefix" value=""/> -->
+    <param name="tf_prefix" value="$(arg tf_prefix)"/>
   </node>
+
+  <!-- Spawn it -->
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf"  args="-urdf -model $(arg tf_prefix) -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description" />
   
-  <node pkg="tf" type="static_transform_publisher" name="map_broadcaster" args="0 0 0 0 0 0 map occupancy_grid 100" /> 
-
-
- 
-    <!-- The odometry estimator, throttling, fake laser etc. go here -->
-    <!-- All the stuff as from usual robot launch file -->
 </launch>
