@@ -1,0 +1,32 @@
+<launch>
+  <param name="/use_sim_time" value="true"/>
+
+  <arg name="open_rviz" default="true"/>
+
+  <!-- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find your_pkg)/map/map.yaml" >
+    <param name="frame_id" value="/map" />
+  </node>
+
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <param name="amcl/initial_pose_x" value="1" />
+    <param name="amcl/initial_pose_y" value="1" />
+    <include file="$(find exercises)/part3/launch/rrt_navigation.launch" />
+  </group>
+
+  <group ns="robot2">
+    <param name="tf_prefix" value="robot2_tf" />
+    <param name="amcl/initial_pose_x" value="-1" />
+    <param name="amcl/initial_pose_y" value="1" />
+    <include file="$(find exercises)/part3/launch/rrt_navigation.launch" />
+  </group>
+
+  <!-- rviz -->
+  <!-- FROM slam.launch-->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find turtlebot3_slam)/rviz/turtlebot3_$(arg slam_methods).rviz"/>
+  </group>
+
+</launch>

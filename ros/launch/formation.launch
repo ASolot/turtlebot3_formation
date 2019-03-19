@@ -1,0 +1,53 @@
+<launch>
+  <!-- No namespace here as we will share this description. 
+       Access with slash at the beginning -->
+
+  <!-- OLD ROBOT DESCRIPTION 
+  <param name="robot_description"
+    command="$(find xacro)/xacro.py $(find turtlebot_description)/robots/kobuki_hexagons_asus_xtion_pro.urdf.xacro" />
+  --> 
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+
+  <!-- BEGIN ROBOT 1-->
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+    <include file="$(find exercises)/part3/ros/launch/robot.launch" >
+      <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+      <arg name="x_pos" default="-1.0"/>
+      <arg name="y_pos" default="-1.0"/>
+      <arg name="z_pos" default="0.0"/>
+      <arg name="robot_name"  value="Robot1" />
+      <arg name="role" value="human_follower"/>
+    </include>
+  </group>
+
+  <!-- BEGIN ROBOT 2-->
+  <group ns="robot2">
+    <param name="tf_prefix" value="robot2_tf" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+    <include file="$(find exercises)/part3/ros/launch/robot.launch" >
+      <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+      <arg name="x_pos" default="-1.3"/>
+      <arg name="y_pos" default="-1.0"/>
+      <arg name="z_pos" default="0.0"/>    
+      <arg name="robot_name"  value="Robot2" />
+      <arg name="role" value="turtle_follower"/>
+    </include>
+  </group>
+
+  <!-- BEGIN ROBOT 3-->
+  <group ns="robot3">
+    <param name="tf_prefix" value="robot3_tf" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro" />
+    <include file="$(find exercises)/part3/ros/launch/robot.launch" >
+      <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+      <arg name="x_pos" default="-1.6"/>
+      <arg name="y_pos" default="-1.0"/>
+      <arg name="z_pos" default="0.0"/>    
+      <arg name="robot_name"  value="Robot3" />
+      <arg name="role" value="turtle_follower"/>
+    </include>
+  </group>
+  
+</launch>
