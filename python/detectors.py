@@ -4,6 +4,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from sklearn.cluster import DBSCAN
+
 import argparse
 import matplotlib.pylab as plt
 import matplotlib.patches as patches
@@ -23,14 +25,16 @@ except ImportError:
   raise ImportError('Unable to import config.py. Make sure this file is in "{}"'.format(directory))
 
 # Each moving object gets to be shared between robots :) 
-# TODO: implement
+# TODO: implement this awesome functionality
 class MovingObject: 
   def __init__(self): 
     pass
 
+def euclidian_norm(first, last=[(0,0)]):
+  return np.sqrt((first[X] - last[X])**2 + (first[Y] - last[Y])**2)
 
-# The DUMB_DETECTOR looks for the closest points that could be clustered into 
-# a semi-circle with a radius similar with the robot's radius 
+# The DUMB_DETECTOR looks for the closest points that could be clustered 
+# then looks at the clusters, and how they have moved, and  
 
 # for human detection, we look for two such semi-circles
 class DumbDetector(object):
@@ -38,16 +42,61 @@ class DumbDetector(object):
     self._namespace = robot_namespace
     self._role = robot_role
     self._pose = np.array([np.nan, np.nan], dtype=np.float32)
+    self._prev_pose = [(float('inf'), float('inf'))]
+    self._pose = [(float('inf'), float('inf'))]
+    self._db = DBSCAN(eps=0.075, min_samples=3)
 
-  def find_goal(self, laser_measurements): 
+  def find_goal(self, coordinates):
+    self._prev_pose = self._pose
 
-    # find all circles
+    # cluster the points
+    self._db.fit(coordinates)
 
-    # look for those who suit the description
+    potential_followable = [] 
 
-    if self._role == HUMAN_FOLLOWER:
+    unique_labels = set(self._db.labels_)
+    for i in unique_labels:
+      if i == -1:
+        continue
 
-    else: 
+      labels_mask = (labels == i)
+
+      class_members = coordinates[labels_mask]
+      
+      first = class_members[0]
+      last= class_members[-1]
+
+      # Robot:  3 random points on a wall? 
+      # Me:     No, thanks! 
+      if len(class_members) < 4: 
+        continue 
+      
+      # we discard all clusters with the max distance between points greater than
+      # the diameter of a potential leg / turtlebot
+      if euclidian_norm(first, last) > 2*LEG_RADIUS_MAX:
+        continue
+
+      centre = np.average(class_members, axis=0)
+      distance = euclidian_norm(centre)
+
+      # probably error or wall
+      if distance < 0.01 or distance > MAX_DISTANCE_TO_TARGET:
+        continue
+
+      potential_followable.append([centre, distance])
+
+    # we assume we won't find anything 
+    self._pose = [(float('inf'), float('inf'))]
+    if potential_followable == None: 
+      return
+
+    first_time = np.isnan(self._prev_pose[0])
+
+    for item in potential_followable: 
+      if euclidian_norm(item[0], self._prev_pose) < MAX_TARGET_DISPLACEMENT or first_time: 
+        self._pose = item[0]
+
+    # TODO: Sanity checks, differentiate between human and turtle 
   
   @property
   def ready(self):
@@ -60,6 +109,10 @@ class DumbDetector(object):
 
 # TODO: implement -> uses inference and some smart-ish stuff, looks all around 
 # and shares obstacles with others
+
+# using angusleigh/leg_tracker https://github.com/angusleigh/leg_tracker/blob/melodic/scripts/joint_leg_tracker.py
+# using https://github.com/wg-perception/people
+
 class AverageDetector(object):
 
   def __init__(self, robot_namespace):
