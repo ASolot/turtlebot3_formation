@@ -28,20 +28,27 @@ ROBOT2 = "tb3_2"
 
 # Human-related parameters -> measured empirically 
 LEG_RADIUS_MIN = 0.03 
-LEG_RADIUS_MAX = 0.06 
+LEG_RADIUS_MAX = 0.08 
 STRIDE_MAX     = 0.6
 
 # Rule-based follower parameters
-MIN_DISTANCE_TO_TARGET  = 0.15
+MIN_DISTANCE_TO_TARGET  = 0.1
+MAX_DISTANCE_TO_TARGET  = 0.6
+
+MAX_TARGET_DISPLACEMENT = 0.15
 
 # Controller parameters 
 # PID
 
-KP = 100
-KI = 0.2
-KD = 0
+KPu = 0.2
+KIu = 0.2
+KDu = 0
+
+KPw = 0.1
+KIw = 0.1
+KDw = 0
 
 # Laser scanner constants 
 DEGREES_FIELD_OF_VIEW       = 70
-DEGREES_FIELD_RESOLUTION    = 5
-DEGREES_CONE_OF_VIEW        = 3
+DEGREES_FIELD_RESOLUTION    = 2
+DEGREES_CONE_OF_VIEW        = 1
