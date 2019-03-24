@@ -51,7 +51,7 @@ except ImportError:
   raise ImportError('Unable to import controlers.py. Make sure this file is in "{}"'.format(directory))
 
 
-center_null = np.array([0,0], dtype=np.float32)
+center_null = np.array([0,0,0], dtype=np.float32)
 
 # class GoalPose(object):
 #   def __init__(self):
@@ -104,12 +104,13 @@ class SimpleLaser(object):
           if _within(angle, center_angle - self._width / 2., center_angle + self._width / 2.):
             self._indices[j].append(i)
 
-    ranges = np.array(msg.ranges)
+    ranges = np.nan_to_num(np.array(msg.ranges))
     for i, idx in enumerate(self._indices):
       # We do not take the minimum range of the cone but the 10-th percentile for robustness.
-      # self._measurements[i] = np.percentile(ranges[idx], 10)
-      self._measurements[i] = ranges[idx]
-      self._coordinates[i] = (ranges[idx]*np.cos(self._angles[i]), ranges[idx]*np.sin(self._angles[i]))
+      self._measurements[i] = np.percentile(ranges[idx], 10)
+      if self._measurements[i] > 3.5:
+        self._measurements[i] = 3.5
+      self._coordinates[i] = (self._measurements[i]*np.cos(self._angles[i]), self._measurements[i]*np.sin(self._angles[i]))
 
   @property
   def ready(self):
@@ -128,12 +129,19 @@ def controller_based(laser_measurements, goal_position, controller):
   u = 0
   w = 0
   
+
   # if the distance to the goal is low, we stop
   if np.sqrt(goal_position[X]**2 + goal_position[Y]**2) <= MIN_DISTANCE_TO_TARGET: 
     return u, w, None
 
+  previous_control_time = current_control_time
+  current_control_time = rospy.Time.now().to_sec()
+
+  dt = current_control_time - previous_control_time
+
   # if not, we use the controller to compute the commands
-  u, w = controller.compute_commands(center_null, goal_position)
+  u, w = controller.compute_commands(center_null, goal_position, dt)
+  
 
   # TODO: implement state-space machine to switch between 
   # goal reach and obstacle avoidance 
@@ -160,6 +168,9 @@ def path_based(laser_measurements, goal_position, controller):
 
 current_time = 0
 previous_detection_time = 0
+
+current_control_time = 0
+previous_control_time = 0
 
 
 def run(args): 
@@ -196,9 +207,9 @@ def run(args):
     controller = feedbackLinearized()
 
   else if args.controller == "pid":
-    controller = pid(P,I,D)
-  else: 
-    controller = pid(P,I,0)
+    controller = pid(KPu, KIu, KDu, KPw, KIw, KDw)
+  else: # default P controller
+    controller = pid()
   
 
   # slam = SLAM()
@@ -219,6 +230,7 @@ def run(args):
     rate_limiter.sleep()
     i += 1
 
+
   while not rospy.is_shutdown():
 
     # slam.update()
@@ -230,15 +242,18 @@ def run(args):
     # if not goal.ready or not slam.ready:
     #   rate_limiter.sleep()
     #   continue
+    
+    # TODO: reshape the main loop 
 
     if not laser.ready: 
       rate_limiter.sleep()
       continue
 
-    # Update goal every 0.5s.
+    # Update goal every 1s.
     time_since = current_time - previous_detection_time
-    if time_since > 0.5:
-      detector.find_goal(laser.measurements)
+    if time_since > 1.0:
+      detector.find_goal(laser.coordinates)
+      # controller.reset()
       previous_detection_time = current_time
       
     # Nothing from the detector yet? sleep!
