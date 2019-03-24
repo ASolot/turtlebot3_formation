@@ -50,6 +50,9 @@ try:
 except ImportError:
   raise ImportError('Unable to import controlers.py. Make sure this file is in "{}"'.format(directory))
 
+
+center_null = np.array([0,0], dtype=np.float32)
+
 # class GoalPose(object):
 #   def __init__(self):
 #     rospy.Subscriber('/move_base_simple/goal', PoseStamped, self.callback)
@@ -74,14 +77,11 @@ class SimpleLaser(object):
     self._name_space = robot_namespace
     rospy.Subscriber(robot_namespace + '/scan', LaserScan, self.callback)
 
-    # 10 degree res
-    first = np.linspace(0, np.pi/3, 13)
-    second = -first
-    second = second[1:]
-
-    self._angles = np.concatenate((first,second), axis=0)
-    self._width = np.pi / 180. * 2.  # 2 degrees cone of view.
+    self._angles_degrees = np.array(range(0, DEGREES_FIELD_OF_VIEW + 1, DEGREES_FIELD_RESOLUTION) + range(360 - DEGREES_FIELD_OF_VIEW, 359, DEGREES_FIELD_RESOLUTION))
+    self._angles = np.pi / 180. * self._angles_degrees
+    self._width = np.pi / 180. * DEGREES_CONE_OF_VIEW
     self._measurements = [float('inf')] * len(self._angles)
+    self._coordinates = [(float('inf'), float('inf'))] * len(self._angles)
     self._indices = None
 
   def callback(self, msg):
@@ -109,29 +109,31 @@ class SimpleLaser(object):
       # We do not take the minimum range of the cone but the 10-th percentile for robustness.
       # self._measurements[i] = np.percentile(ranges[idx], 10)
       self._measurements[i] = ranges[idx]
+      self._coordinates[i] = (ranges[idx]*np.cos(self._angles[i]), ranges[idx]*np.sin(self._angles[i]))
 
   @property
   def ready(self):
-    return not np.isnan(self._measurements[0])
+    return (not np.isnan(self._measurements[0]) and not np.isnan(self._coordinates[0][0]))
 
   @property
   def measurements(self):
     return self._measurements
+
+  @property
+  def coordinates(self):
+    return self._coordinates
 
 # controller-based navigation, computed in local coordinate system
 def controller_based(laser_measurements, goal_position, controller):
   u = 0
   w = 0
   
-  
-
-
   # if the distance to the goal is low, we stop
-  if np.sqrt(goal[X]**2 + goal[Y]**2) <= MIN_DISTANCE_TO_TARGET: 
+  if np.sqrt(goal_position[X]**2 + goal_position[Y]**2) <= MIN_DISTANCE_TO_TARGET: 
     return u, w, None
 
-  # if not, we use one of the controllers to compute the commands
-  
+  # if not, we use the controller to compute the commands
+  u, w = controller.compute_commands(center_null, goal_position)
 
   # TODO: implement state-space machine to switch between 
   # goal reach and obstacle avoidance 
@@ -143,17 +145,16 @@ def controller_based(laser_measurements, goal_position, controller):
 # path-based navigation
 def path_based(laser_measurements, goal_position, controller):
 
-    # # Update plan every 0.5s.
-    # time_since = current_time - previous_time
-    # if current_path and time_since < 2.:
-    #   rate_limiter.sleep()
-    #   continue
+  # run our preferred path planning algo, once goal has changed
+  # we assume obstacles are not moving faster than the goal
 
-    # Run RRT.
-    # start_node, final_node = rrt.rrt(slam.pose, goal.position, slam.occupancy_grid)
-    # current_path = get_path(final_node)
-    # if not current_path:
-    #   print('Unable to reach goal position:', goal.position)
+  # Run RRT.
+  # start_node, final_node = rrt.rrt(slam.pose, goal.position, slam.occupancy_grid)
+  # current_path = get_path(final_node)
+  # if not current_path:
+  #   print('Unable to reach goal position:', goal.position)
+
+  # now just follow the path nicely, using one of our controllers
   
   return 0, 0, None
 
@@ -161,7 +162,7 @@ current_time = 0
 previous_detection_time = 0
 
 
-def run(args):
+def run(args): 
 
   robot_namespace = args.robot
   robot_role      = args.mode
@@ -219,7 +220,7 @@ def run(args):
     i += 1
 
   while not rospy.is_shutdown():
-    
+
     # slam.update()
     current_time = rospy.Time.now().to_sec()
 
