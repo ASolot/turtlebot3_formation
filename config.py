@@ -40,3 +40,8 @@ MIN_DISTANCE_TO_TARGET  = 0.15
 KP = 100
 KI = 0.2
 KD = 0
+
+# Laser scanner constants 
+DEGREES_FIELD_OF_VIEW       = 70
+DEGREES_FIELD_RESOLUTION    = 5
+DEGREES_CONE_OF_VIEW        = 3
