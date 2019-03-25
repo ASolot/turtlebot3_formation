@@ -16,6 +16,9 @@ import re
 import scipy.signal
 import yaml
 
+X = 0
+Y = 1
+
 # Import the config.py variables rather than copy-pasting 
 directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../')
 sys.path.insert(0, directory)
@@ -30,7 +33,7 @@ class MovingObject:
   def __init__(self): 
     pass
 
-def euclidian_norm(first, last=[(0,0)]):
+def euclidian_norm(first, last=[0,0]):
   return np.sqrt((first[X] - last[X])**2 + (first[Y] - last[Y])**2)
 
 # The DUMB_DETECTOR looks for the closest points that could be clustered 
@@ -42,12 +45,14 @@ class DumbDetector(object):
     self._namespace = robot_namespace
     self._role = robot_role
     self._pose = np.array([np.nan, np.nan], dtype=np.float32)
-    self._prev_pose = [(float('inf'), float('inf'))]
-    self._pose = [(float('inf'), float('inf'))]
+    self._prev_pose = np.array([np.nan, np.nan], dtype=np.float32)
     self._db = DBSCAN(eps=0.075, min_samples=3)
 
   def find_goal(self, coordinates):
     self._prev_pose = self._pose
+
+    # sanity check -> if nan we cut to 0
+    coordinates = np.nan_to_num(coordinates)
 
     # cluster the points
     self._db.fit(coordinates)
@@ -59,7 +64,7 @@ class DumbDetector(object):
       if i == -1:
         continue
 
-      labels_mask = (labels == i)
+      labels_mask = (self._db.labels_ == i)
 
       class_members = coordinates[labels_mask]
       
@@ -73,27 +78,27 @@ class DumbDetector(object):
       
       # we discard all clusters with the max distance between points greater than
       # the diameter of a potential leg / turtlebot
-      if euclidian_norm(first, last) > 2*LEG_RADIUS_MAX:
+      if euclidian_norm(first, last) > 2*config.LEG_RADIUS_MAX:
         continue
 
       centre = np.average(class_members, axis=0)
       distance = euclidian_norm(centre)
 
       # probably error or wall
-      if distance < 0.01 or distance > MAX_DISTANCE_TO_TARGET:
+      if distance < 0.01 or distance > config.MAX_DISTANCE_TO_TARGET:
         continue
 
       potential_followable.append([centre, distance])
 
     # we assume we won't find anything 
-    self._pose = [(float('inf'), float('inf'))]
+    self._pose = np.array([np.nan, np.nan], dtype=np.float32)
     if potential_followable == None: 
       return
 
     first_time = np.isnan(self._prev_pose[0])
 
     for item in potential_followable: 
-      if euclidian_norm(item[0], self._prev_pose) < MAX_TARGET_DISPLACEMENT or first_time: 
+      if euclidian_norm(item[0], self._prev_pose) < config.MAX_TARGET_DISPLACEMENT or first_time: 
         self._pose = item[0]
 
     # TODO: Sanity checks, differentiate between human and turtle 

@@ -34,6 +34,14 @@ try:
 except ImportError:
   raise ImportError('Unable to import detectors.py. Make sure this file is in "{}"'.format(directory))
 
+# Import the controllers.py variables rather than copy-pasting 
+try:
+  import controllers
+except ImportError:
+  raise ImportError('Unable to import controlers.py. Make sure this file is in "{}"'.format(directory))
+
+
+
 # Import the config.py variables rather than copy-pasting 
 directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../')
 sys.path.insert(0, directory)
@@ -42,13 +50,6 @@ try:
 except ImportError:
   raise ImportError('Unable to import config.py. Make sure this file is in "{}"'.format(directory))
 
-# Import the controllers.py variables rather than copy-pasting 
-directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../python')
-sys.path.insert(0, directory)
-try:
-  import controllers
-except ImportError:
-  raise ImportError('Unable to import controlers.py. Make sure this file is in "{}"'.format(directory))
 
 
 center_null = np.array([0,0,0], dtype=np.float32)
@@ -73,13 +74,12 @@ center_null = np.array([0,0,0], dtype=np.float32)
 #     return self._position
 
 class SimpleLaser(object):
-  def __init__(self, robot_namespace):
+  def __init__(self, robot_namespace=config.ROBOT0):
     self._name_space = robot_namespace
     rospy.Subscriber(robot_namespace + '/scan', LaserScan, self.callback)
-
-    self._angles_degrees = np.array(range(0, DEGREES_FIELD_OF_VIEW + 1, DEGREES_FIELD_RESOLUTION) + range(360 - DEGREES_FIELD_OF_VIEW, 359, DEGREES_FIELD_RESOLUTION))
+    self._angles_degrees = np.array(range(0, config.DEGREES_FIELD_OF_VIEW + 1, config.DEGREES_FIELD_RESOLUTION) + range(360 - config.DEGREES_FIELD_OF_VIEW, 359, config.DEGREES_FIELD_RESOLUTION))
     self._angles = np.pi / 180. * self._angles_degrees
-    self._width = np.pi / 180. * DEGREES_CONE_OF_VIEW
+    self._width = np.pi / 180. * config.DEGREES_CONE_OF_VIEW
     self._measurements = [float('inf')] * len(self._angles)
     self._coordinates = [(float('inf'), float('inf'))] * len(self._angles)
     self._indices = None
@@ -124,14 +124,26 @@ class SimpleLaser(object):
   def coordinates(self):
     return self._coordinates
 
+
+current_time = 0
+previous_detection_time = 0
+
+current_control_time = 0
+previous_control_time = 0
+
 # controller-based navigation, computed in local coordinate system
 def controller_based(laser_measurements, goal_position, controller):
+  global current_time 
+  global previous_detection_time 
+
+  global current_control_time 
+  global previous_control_time 
+
   u = 0
   w = 0
   
-
   # if the distance to the goal is low, we stop
-  if np.sqrt(goal_position[X]**2 + goal_position[Y]**2) <= MIN_DISTANCE_TO_TARGET: 
+  if np.sqrt(goal_position[config.X] ** 2 + goal_position[config.Y]**2) <= config.MIN_DISTANCE_TO_TARGET: 
     return u, w, None
 
   previous_control_time = current_control_time
@@ -166,50 +178,53 @@ def path_based(laser_measurements, goal_position, controller):
   
   return 0, 0, None
 
-current_time = 0
-previous_detection_time = 0
-
-current_control_time = 0
-previous_control_time = 0
 
 
 def run(args): 
+
+  global current_time 
+  global previous_detection_time 
+
+  global current_control_time 
+  global previous_control_time 
 
   robot_namespace = args.robot
   robot_role      = args.mode
 
   rospy.init_node(robot_namespace + '_navigation')
 
+  laser = SimpleLaser(robot_namespace)
+
   # Update control every 100 ms.
   rate_limiter = rospy.Rate(100)
   publisher = rospy.Publisher(robot_namespace + '/cmd_vel', Twist, queue_size=5)
   path_publisher = rospy.Publisher(robot_namespace + '/path', Path, queue_size=1)
 
-  laser = SimpleLaser(robot_namespace)
+
 
   # Get the type of detector
   if args.detector == "average":
-    detector = AverageDetector(robot_namespace, robot_role)
-  else if args.detector == "smart": 
-    detector = SmartDetector(robot_namespace, robot_role)
+    detector = detectors.AverageDetector(robot_namespace, robot_role)
+  elif args.detector == "smart": 
+    detector = detectors.SmartDetector(robot_namespace, robot_role)
   else: # by default we use the dumb one
-    detector = DumbDetector(robot_namespace, robot_role)
+    detector = detectors.DumbDetector(robot_namespace, robot_role)
 
   # Get the navigation method
   navigation_method = globals()[args.navigation]
   
   # Get to choose which controller to use
   if args.controller == "lqr":
-    controller = lqr(0,0,0,0)
+    controller = controllers.lqr(0,0,0,0)
 
   # this might get out 
-  else if args.controller == "feedbackLinearized":
-    controller = feedbackLinearized()
+  elif args.controller == "feedbackLinearized":
+    controller = controllers.feedbackLinearized()
 
-  else if args.controller == "pid":
-    controller = pid(KPu, KIu, KDu, KPw, KIw, KDw)
+  elif args.controller == "pid":
+    controller = controllers.pid(config.KPu, config.KIu, config.KDu, config.KPw, config.KIw, config.KDw)
   else: # default P controller
-    controller = pid()
+    controller = controllers.pid()
   
 
   # slam = SLAM()
@@ -254,6 +269,7 @@ def run(args):
     if time_since > 1.0:
       detector.find_goal(laser.coordinates)
       # controller.reset()
+      print (detector.goal_pose)
       previous_detection_time = current_time
       
     # Nothing from the detector yet? sleep!
@@ -262,7 +278,7 @@ def run(args):
       continue
 
     # returns the coordinate and the type of object for dumb detector
-    goal_position = detector.goal_pose()
+    goal_position = detector.goal_pose
     
     # goal_reached = np.linalg.norm(slam.pose[:2] - goal.position) < .2
     # if goal_reached:
@@ -289,8 +305,8 @@ def run(args):
         pose_msg.header.seq = frame_id
         pose_msg.header.stamp = path_msg.header.stamp
         pose_msg.header.frame_id = 'map'
-        pose_msg.pose.position.x = u[X]
-        pose_msg.pose.position.y = u[Y]
+        pose_msg.pose.position.x = u[config.X]
+        pose_msg.pose.position.y = u[config.Y]
         path_msg.poses.append(pose_msg)
       path_publisher.publish(path_msg)
 
@@ -305,7 +321,7 @@ if __name__ == '__main__':
   parser.add_argument('--robot', action='store', default='tb3_0', help='Whose robot navigation system to start')
   parser.add_argument('--detector', action='store', default='dumb', help='Choose the type of detector', choices=['dumb', 'average', 'smart'])
   parser.add_argument('--navigation', action='store', default='controller_based', help='Choose the navigation type', choices=['controller_based','path_based'])
-  parser.add_argument('--controller', action='store', default='pid', help='Choose the robot controller', choices=['pi','pid','lqr', 'feedbackLinearized'])
+  parser.add_argument('--controller', action='store', default='p', help='Choose the robot controller', choices=['p','pid','lqr', 'feedbackLinearized'])
   args, unknown = parser.parse_known_args()
   try:
     run(args)

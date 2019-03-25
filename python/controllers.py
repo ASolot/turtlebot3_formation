@@ -1,5 +1,10 @@
 import numpy as np
 import scipy
+import config
+
+X = 0
+Y = 1
+YAW = 2
 
 def euclidian_norm(first, last=[(0,0)]):
   return np.sqrt((first[X] - last[X])**2 + (first[Y] - last[Y])**2)
@@ -8,7 +13,7 @@ def euclidian_norm(first, last=[(0,0)]):
 # two separate PIDs, for u and w
 class pid(object): 
 
-    def __init__(self, Pu=0.5, Iu=0., Du=0., Pw=0.4, Iw=0., Dw=0.): 
+    def __init__(self, Pu=0.05, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
         self._Pu = Pu
         self._Iu = Iu
         self._Du = Du
@@ -28,14 +33,18 @@ class pid(object):
         self._w_integral  = 0.
         self._prev_position = [(0,0)]
     
+    # scale it to step response
     def compute_commands(self, current_pose, goal_position, dt):
         
-        distance_error    = euclidian_norm(current_pose[0:2], goal_position) - MIN_DISTANCE_TO_TARGET
-        orientation_error = np.arctan2(goal_position[Y], goal_position[x]) - np.pi/2.0 - current_pose[YAW]
+        distance_error    = euclidian_norm(current_pose[0:2], goal_position) - 2*config.MIN_DISTANCE_TO_TARGET
+        orientation_error = np.arctan2(goal_position[Y], goal_position[X]) - current_pose[YAW]
 
         # compute errors for u and w
         u_error = distance_error * np.cos(orientation_error)
         w_error = orientation_error 
+
+        print (distance_error)
+        
 
         # compute the integrals
         self._u_integral += u_error * dt
@@ -54,10 +63,22 @@ class pid(object):
 
         u = u_error * self._Pu + self._Iu * self._u_integral + self._Du * u_Derivative
         w = w_error * self._Pw + self._Iw * self._w_integral + self._Dw * w_Derivative
-
+        # w = -w
         # remember the errors 
         self._last_u_error = u_error
         self._last_w_error = w_error
+
+        if u > config.SPEED:
+            u = config.SPEED
+        
+        if np.abs(w) > config.SPEED:
+            w = w/w*config.SPEED
+
+        if  np.abs(orientation_error) < 0.1: 
+            w = 0
+
+        # if np.abs(distance_error) < config.MIN_DISTANCE_TO_TARGET:
+        #     u = 0
 
         return u, w 
 
