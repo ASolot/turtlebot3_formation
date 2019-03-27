@@ -73,7 +73,7 @@ class DumbDetector(object):
 
       # Robot:  3 random points on a wall? 
       # Me:     No, thanks! 
-      if len(class_members) < 4: 
+      if len(class_members) < 3: 
         continue 
       
       # we discard all clusters with the max distance between points greater than
@@ -96,10 +96,14 @@ class DumbDetector(object):
       return
 
     first_time = np.isnan(self._prev_pose[0])
+    minimum = config.MAX_DISTANCE_TO_TARGET
 
-    for item in potential_followable: 
-      if euclidian_norm(item[0], self._prev_pose) < config.MAX_TARGET_DISPLACEMENT or first_time: 
-        self._pose = item[0]
+    # return the closest point to the last, which is within displacement 
+    for item in potential_followable:
+      if minimum > item[1]:
+        if euclidian_norm(item[0], self._prev_pose) < config.MAX_TARGET_DISPLACEMENT or first_time: 
+          self._pose = item[0]
+          minimum = item[1]
 
     # TODO: Sanity checks, differentiate between human and turtle 
   

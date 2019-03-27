@@ -13,7 +13,7 @@ def euclidian_norm(first, last=[(0,0)]):
 # two separate PIDs, for u and w
 class pid(object): 
 
-    def __init__(self, Pu=0.05, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
+    def __init__(self, Pu=1.2, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
         self._Pu = Pu
         self._Iu = Iu
         self._Du = Du
@@ -25,6 +25,8 @@ class pid(object):
         self._u_integral  = 0.
         self._w_integral  = 0.
         self._prev_position = [(0,0)]
+        self._distance_error = 0.
+        self._orientation_error = 0.
 
     def reset(self):
         self._last_u_error = 0.
@@ -36,14 +38,14 @@ class pid(object):
     # scale it to step response
     def compute_commands(self, current_pose, goal_position, dt):
         
-        distance_error    = euclidian_norm(current_pose[0:2], goal_position) - 2*config.MIN_DISTANCE_TO_TARGET
-        orientation_error = np.arctan2(goal_position[Y], goal_position[X]) - current_pose[YAW]
+        self._distance_error    = euclidian_norm(current_pose[0:2], goal_position) - 2*config.MIN_DISTANCE_TO_TARGET
+        self._orientation_error = np.arctan2(goal_position[Y], goal_position[X]) - current_pose[YAW]
 
         # compute errors for u and w
-        u_error = distance_error * np.cos(orientation_error)
-        w_error = orientation_error 
+        u_error = self._distance_error * np.cos(self._orientation_error)
+        w_error = self._orientation_error 
 
-        print (distance_error)
+        print (self._distance_error)
         
 
         # compute the integrals
@@ -70,15 +72,15 @@ class pid(object):
 
         if u > config.SPEED:
             u = config.SPEED
+
+        if u < 0: 
+            u = 0
         
         if np.abs(w) > config.SPEED:
             w = w/w*config.SPEED
 
-        if  np.abs(orientation_error) < 0.1: 
+        if  np.abs(self._orientation_error) < 0.1: 
             w = 0
-
-        # if np.abs(distance_error) < config.MIN_DISTANCE_TO_TARGET:
-        #     u = 0
 
         return u, w 
 

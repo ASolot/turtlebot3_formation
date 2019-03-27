@@ -32,10 +32,10 @@ LEG_RADIUS_MAX = 0.08
 STRIDE_MAX     = 0.6
 
 # Rule-based follower parameters
-MIN_DISTANCE_TO_TARGET  = 0.1
-MAX_DISTANCE_TO_TARGET  = 0.6
+MIN_DISTANCE_TO_TARGET  = 0.25
+MAX_DISTANCE_TO_TARGET  = 1.0
 
-MAX_TARGET_DISPLACEMENT = 0.15
+MAX_TARGET_DISPLACEMENT = 0.5
 
 # Controller parameters 
 # PID
@@ -52,3 +52,9 @@ KDw = 0
 DEGREES_FIELD_OF_VIEW       = 70
 DEGREES_FIELD_RESOLUTION    = 2
 DEGREES_CONE_OF_VIEW        = 1
+
+
+################################
+######## LOGS RELATED ##########
+
+PID_CONTROLLER_LOG_PATH = "tmp/PID/pid_log.txt"
