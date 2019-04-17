@@ -40,11 +40,14 @@ if [ "$1" = "real" ]; then
     # any child we launch inherits the bash varibles :) 
     # bring the beasts alive + clock time
 
-    gnome-terminal -x sh -c "roslaunch exercises send_clock.launch"
+    echo "launching the master"
+    gnome-terminal -x sh -c "roscore"
 
-    ./bash/beast_wake_up.sh ${tb3_0_ID}
-    ./bash/beast_wake_up.sh ${tb3_1_ID}
-    ./bash/beast_wake_up.sh ${tb3_2_ID}
+    # gnome-terminal -x sh -c "roslaunch turtlebot3_formation send_clock.launch"
+
+    ./bash/beast_wake_up.sh ${tb3_0_ID} tb3_0
+    ./bash/beast_wake_up.sh ${tb3_1_ID} tb3_1
+    ./bash/beast_wake_up.sh ${tb3_2_ID} tb3_2
 
     # have all the networks configured properly
 

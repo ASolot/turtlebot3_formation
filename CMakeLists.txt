@@ -83,42 +83,42 @@ find_package(catkin REQUIRED COMPONENTS
 # Setup for python modules and scripts
 ################################################################################
 
-catkin_python_setup()
+#catkin_python_setup()
 
 ################################################################################
 # Declare catkin specific configuration to be passed to dependent projects
 ################################################################################
 
-catkin_package(
-  DEPENDS
-    rospy
-    std_msgs
-    geometry_msgs
-    nav_msgs
-    message_runtime
-)
+#catkin_package(
+#  DEPENDS
+#    rospy
+#    std_msgs
+#    geometry_msgs
+#    nav_msgs
+#    message_runtime
+#)
 
 ################################################################################
 # Build
 ################################################################################
 
-include_directories(
-  include
-  ${catkin_INCLUDE_DIRS}
-)
+#include_directories(
+#  include
+#  ${catkin_INCLUDE_DIRS}
+#)
 
 ################################################################################
 # Install
 ################################################################################
 # TODO: Change required files and folders 
 
-catkin_install_python(PROGRAMS
-  #TODO: 
-  
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+#catkin_install_python(PROGRAMS
+#  #TODO: 
+#  
+#  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
-install(DIRECTORY 
-    python ros
-    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+#install(DIRECTORY 
+#    python ros
+#    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+#)
