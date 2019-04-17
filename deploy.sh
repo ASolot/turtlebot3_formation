@@ -61,7 +61,7 @@ else
     sleep 8
 
     echo "launching slam"
-    gnome-terminal -x sh -c "echo 'launching slam'; roslaunch turtlebot3_formation multirobot_slam.launch"
+    gnome-terminal -x sh -c "echo 'launching slam'; roslaunch turtlebot3_formation multirobot_slam.launch; bash"
     sleep 2
 
     # echo "launching leader navigation"
