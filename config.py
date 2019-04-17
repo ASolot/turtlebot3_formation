@@ -1,5 +1,7 @@
 # Better keep constants in a single safe place
 
+import numpy as np
+
 # Constants used for indexing.
 X = 0
 Y = 1
@@ -14,6 +16,10 @@ OCCUPIED = 2
 ROBOT_RADIUS = 0.105 / 2.
 
 SPEED = .2
+REVERSE_SPEED = -0.05
+MAX_W = 40.0 * np.pi / 180.0
+MAX_ACCEL = 0.1  # maximum acceleration [m/ss]
+MAX_W_ACCEL = 40.0 * np.pi / 180.0
 EPSILON = .1
 
 # Robot Roles
@@ -32,8 +38,11 @@ LEG_RADIUS_MAX = 0.08
 STRIDE_MAX     = 0.6
 
 # Rule-based follower parameters
-MIN_DISTANCE_TO_TARGET  = 0.25
-MAX_DISTANCE_TO_TARGET  = 1.0
+# MIN_DISTANCE_TO_TARGET  = 0.25
+# MAX_DISTANCE_TO_TARGET  = 1.0
+
+MIN_DISTANCE_TO_TARGET  = 0.5
+MAX_DISTANCE_TO_TARGET  = 1.5
 
 MAX_TARGET_DISPLACEMENT = 0.5
 
@@ -57,4 +66,8 @@ DEGREES_CONE_OF_VIEW        = 1
 ################################
 ######## LOGS RELATED ##########
 
-PID_CONTROLLER_LOG_PATH = "tmp/PID/pid_log.txt"
+LOG_ROOT_DIR            = "../logs"
+# PID_CONTROLLER_LOG_PATH = "/PID/pid_log.txt"
+
+
+SIM_LOOP_TIME = 0.1
