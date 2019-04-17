@@ -1,0 +1,8 @@
+<launch>
+	<arg name="mode" />
+
+	<node pkg="turtlebot3_formation" type="navigation.py" robot="tb3_0" name="tb3_0" output="screen"></node>
+	<node pkg="turtlebot3_formation" type="navigation.py" robot="tb3_1" name="tb3_1" output="screen"></node>
+	<node pkg="turtlebot3_formation" type="navigation.py" robot="tb3_2" name="tb3_2" output="screen"></node>
+
+</launch>
