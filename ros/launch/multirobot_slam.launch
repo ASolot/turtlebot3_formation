@@ -23,24 +23,21 @@
   <arg name="third_tb3"  default="tb3_2"/>
 
   <group ns="$(arg first_tb3)">
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-      <param name="publish_frequency" type="double" value="50.0" />
-      <param name="tf_prefix" value="$(arg first_tb3)"/>
-    </node>
+    <include file="$(find turtlebot3_formation)/ros/launch/slam.launch">
+      <arg name="namespace" value="$(arg first_tb3)"/>
+    </include>
   </group>
 
   <group ns="$(arg second_tb3)">
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-      <param name="publish_frequency" type="double" value="50.0" />
-      <param name="tf_prefix" value="$(arg second_tb3)"/>
-    </node>
+    <include file="$(find turtlebot3_formation)/ros/launch/slam.launch">
+      <arg name="namespace" value="$(arg second_tb3)"/>
+    </include>
   </group>
   
   <group ns="$(arg third_tb3)">
-    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
-      <param name="publish_frequency" type="double" value="50.0" />
-      <param name="tf_prefix" value="$(arg third_tb3)"/>
-    </node>
+    <include file="$(find turtlebot3_formation)/ros/launch/slam.launch">
+      <arg name="namespace" value="$(arg third_tb3)"/>
+    </include>
   </group>
 
   <arg name="first_tb3_x_pos" default="-7.0"/>
