@@ -12,8 +12,8 @@ def euclidian_norm(first, last=[(0,0)]):
 
 # two separate PIDs, for u and w
 class pid(object): 
-
-    def __init__(self, Pu=1.2, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
+    def __init__(self, Pu=0.5, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
+    # def __init__(self, Pu=1.2, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.01): 
         self._Pu = Pu
         self._Iu = Iu
         self._Du = Du
@@ -84,26 +84,6 @@ class pid(object):
 
         return u, w 
 
-
-# # TODO: implement the controller
-# class lqr(object): 
-
-#     def __init__(self, A, B, Q, R): 
-#         self.A = A
-#         self.B = B
-#         self.Q = Q
-#         self.R = R
-
-#     def compute(self, x): 
-
-#         X = np.matrix(scipy.linalg.solve_discrete_are(A, B, Q, R))
-     
-#         #compute the LQR gain
-#         K = np.matrix(scipy.linalg.inv(B.T*X*B+R)*(B.T*X*A))
-     
-#         eigVals, eigVecs = scipy.linalg.eig(A-B*K)
-     
-#         return K, X, eigVals
 
 
 # class feedbackLinearized(object): 

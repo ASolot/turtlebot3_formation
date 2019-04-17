@@ -116,33 +116,47 @@ class DumbDetector(object):
     return self._pose
 
 
-# TODO: implement -> uses inference and some smart-ish stuff, looks all around 
-# and shares obstacles with others
+# We used the Obstacle Detector package 
+# https://github.com/tysik/obstacle_detector/ 
+# depending on the robot's role, we either track humans or turtlebots
 
-# using angusleigh/leg_tracker https://github.com/angusleigh/leg_tracker/blob/melodic/scripts/joint_leg_tracker.py
-# using https://github.com/wg-perception/people
+# TODO: Use it in conjunction with 
 
 class AverageDetector(object):
 
-  def __init__(self, robot_namespace):
-    self.namespace = robot_namespace
-    self._pose = []
+  def __init__(self, robot_namespace, robot_role):
+    self._namespace = robot_namespace
+    self._role = robot_role
+    self._pose = np.array([np.nan, np.nan], dtype=np.float32)
+    self._prev_pose = np.array([np.nan, np.nan], dtype=np.float32)
+    # rospy.Subscriber(robot_namespace + '/scan', LaserScan, self.callback)
 
-  def find_object(self):
-    # Get the new position of the object  
-  
-    # If there is no position available 
-    return None
+  # filtering the objects
+  def callback(self, msg):
+    pass
+
+  # we find the goal each time the new positions are published and the 
+  # callback is called, so won't do smth here
+  def find_goal(self, coordinates):
+    pass
+
 
   @property
   def ready(self):
     return not np.isnan(self._pose[0])
 
+  @property
+  def goal_pose(self):
+    return self._pose
+
 
 # The SMART_DETECTOR makes use of the Kinect Point-cloud to detect humans
 # TODO: implement
+# using angusleigh/leg_tracker https://github.com/angusleigh/leg_tracker/blob/melodic/scripts/joint_leg_tracker.py
+# https://github.com/wg-perception/people 
 class SmartDetector(object): 
   def __init__(self, robot_namespace): 
+    raise Exception("The SmartDetector based on Kinect Point-cloud was not implemented")
     self.namespace = robot_namespace
     self._pose = []
   
@@ -163,5 +177,3 @@ if __name__ == '__main__':
   parser.add_argument('--visible', action='store', default='no', options=['human', 'turtlebots', 'all', 'all_plus_moving_obstacles'], help='Which detections to show.')
   args, unknown = parser.parse_known_args()
   
-
-  #TODO: implement others 

@@ -17,5 +17,9 @@
   <!-- include our robots -->
   <include file="$(find turtlebot3_formation)/ros/launch/formation.launch"/>
 
+  <!-- spawn a human -->
+  <!-- <include file="$(find turtlebot3_formation)/ros/launch/spawn_person.launch"/> -->
+
+
   <!-- Navigation is kept separately -->
 </launch>

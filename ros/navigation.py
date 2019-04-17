@@ -165,6 +165,13 @@ def controller_based(laser_measurements, goal_position, controller):
 # path-based navigation
 def path_based(laser_measurements, goal_position, controller):
 
+
+  global current_time 
+  global previous_detection_time 
+
+  global current_control_time 
+  global previous_control_time 
+
   # run our preferred path planning algo, once goal has changed
   # we assume obstacles are not moving faster than the goal
 
@@ -200,7 +207,9 @@ def run(args):
   publisher = rospy.Publisher(robot_namespace + '/cmd_vel', Twist, queue_size=5)
   path_publisher = rospy.Publisher(robot_namespace + '/path', Path, queue_size=1)
 
-
+  # CONTROLLER_LOG_PATH = config.LOG_ROOT_DIR + '/' + "static_PID_7_" + robot_namespace + ".txt"
+  # with open(CONTROLLER_LOG_PATH, 'w'):
+  #   pass
 
   # Get the type of detector
   if args.detector == "average":
@@ -269,7 +278,6 @@ def run(args):
     if time_since > 1.0:
       detector.find_goal(laser.coordinates)
       # controller.reset()
-      print (detector.goal_pose)
       previous_detection_time = current_time
       
     # Nothing from the detector yet? sleep!
@@ -291,6 +299,10 @@ def run(args):
     vel_msg.linear.x = u
     vel_msg.angular.z = w
     publisher.publish(vel_msg)
+
+
+    # with open(CONTROLLER_LOG_PATH, 'a') as fp:
+    #   fp.write('\n' + str(current_control_time) + ' ' + str(controller._distance_error) + ' ' + str(controller._orientation_error) + ' ' + str(u) +  ' ' + str(w)) 
 
     # check if we have some path to publish
     if current_path != None:

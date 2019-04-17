@@ -14,3 +14,12 @@ To run localization:
 
 To run RViz:
 > roslaunch exercises rviz.launch
+
+
+
+Install obstacle_detector 
+
+Install Armadillo library 
+sudo apt-get install libarmadillo-dev
+
+catkin make 

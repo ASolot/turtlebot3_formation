@@ -13,13 +13,36 @@
     <arg name="ns" value="tb3_2"/>
   </include>
 
-  <!-- Merge maps -->
+  
   <!-- <include file="$(find turtlebot3_gazebo)/launch/multi_map_merge.launch">
     <param name="known_init_poses" value="false"/>
   </include> -->
   <arg name="first_tb3"  default="tb3_0"/>
   <arg name="second_tb3" default="tb3_1"/>
   <arg name="third_tb3"  default="tb3_2"/>
+<!-- 
+  <group ns="$(arg first_tb3)">
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value=""/>
+    </node>
+  </group>
+
+  <group ns="$(arg second_tb3)">
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value=""/>
+    </node>
+  </group>
+
+  <group ns="$(arg third_tb3)">
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+      <param name="publish_frequency" type="double" value="50.0" />
+      <param name="tf_prefix" value=""/>
+    </node>
+  </group> -->
+
+  <!-- Merge maps -->
 
   <arg name="first_tb3_x_pos" default="-7.0"/>
   <arg name="first_tb3_y_pos" default="-1.0"/>
