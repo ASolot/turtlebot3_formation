@@ -43,7 +43,8 @@ if [ "$1" = "real" ]; then
     echo "launching the master"
     gnome-terminal -x sh -c "roscore"
 
-    # gnome-terminal -x sh -c "roslaunch turtlebot3_formation send_clock.launch"
+    sleep 1
+    gnome-terminal -x sh -c "roslaunch turtlebot3_formation send_clock.launch"
 
     ./bash/beast_wake_up.sh ${tb3_0_ID} tb3_0
     ./bash/beast_wake_up.sh ${tb3_1_ID} tb3_1

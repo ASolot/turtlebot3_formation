@@ -16,6 +16,8 @@ import re
 import scipy.signal
 import yaml
 
+from std_msgs.msg import String
+
 X = 0
 Y = 1
 
@@ -26,12 +28,6 @@ try:
   import config
 except ImportError:
   raise ImportError('Unable to import config.py. Make sure this file is in "{}"'.format(directory))
-
-# Each moving object gets to be shared between robots :) 
-# TODO: implement this awesome functionality
-class MovingObject: 
-  def __init__(self): 
-    pass
 
 def euclidian_norm(first, last=[0,0]):
   return np.sqrt((first[X] - last[X])**2 + (first[Y] - last[Y])**2)
@@ -129,7 +125,7 @@ class AverageDetector(object):
     self._role = robot_role
     self._pose = np.array([np.nan, np.nan], dtype=np.float32)
     self._prev_pose = np.array([np.nan, np.nan], dtype=np.float32)
-    # rospy.Subscriber(robot_namespace + '/scan', LaserScan, self.callback)
+    rospy.Subscriber(robot_namespace + '/tracked_obstacles', String, self.callback)
 
   # filtering the objects
   def callback(self, msg):

@@ -7,9 +7,7 @@ Panels:
         - /Global Options1
         - /TF1/Frames1
         - /Map4
-        - /Obstacles1
-        - /Obstacles2
-        - /Obstacles3
+        - /Obstacles4
       Splitter Ratio: 0.360396028
     Tree Height: 511
   - Class: rviz/Selection
@@ -389,7 +387,7 @@ Visualization Manager:
       Value: true
     - Circles color: 170; 0; 0
       Class: Obstacles
-      Enabled: true
+      Enabled: false
       Margin color: 0; 170; 0
       Name: Obstacles
       Opacity: 0.75
@@ -397,10 +395,10 @@ Visualization Manager:
       Segments thickness: 0.0299999993
       Topic: /tb3_1/tracked_obstacles
       Unreliable: false
-      Value: true
+      Value: false
     - Circles color: 170; 0; 0
       Class: Obstacles
-      Enabled: true
+      Enabled: false
       Margin color: 0; 170; 0
       Name: Obstacles
       Opacity: 0.75
@@ -408,7 +406,7 @@ Visualization Manager:
       Segments thickness: 0.0299999993
       Topic: /tb3_2/tracked_obstacles
       Unreliable: false
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -443,7 +441,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 81.8657074
+      Scale: 177.818268
       Target Frame: map
       Value: TopDownOrtho (rviz)
       X: -1.12365377
@@ -465,5 +463,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1364
-  X: 824
+  X: 556
   Y: 71
