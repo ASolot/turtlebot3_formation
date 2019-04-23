@@ -41,7 +41,6 @@ except ImportError:
   raise ImportError('Unable to import controlers.py. Make sure this file is in "{}"'.format(directory))
 
 
-
 # Import the config.py variables rather than copy-pasting 
 directory = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../')
 sys.path.insert(0, directory)
@@ -49,8 +48,6 @@ try:
   import config
 except ImportError:
   raise ImportError('Unable to import config.py. Make sure this file is in "{}"'.format(directory))
-
-
 
 center_null = np.array([0,0,0], dtype=np.float32)
 
@@ -124,6 +121,10 @@ class SimpleLaser(object):
   def coordinates(self):
     return self._coordinates
 
+  @property
+  def obstacles(self):
+    return None
+
 
 current_time = 0
 previous_detection_time = 0
@@ -132,7 +133,7 @@ current_control_time = 0
 previous_control_time = 0
 
 # controller-based navigation, computed in local coordinate system
-def controller_based(laser_measurements, goal_position, controller):
+def controller_based(obstacles, goal_position, controller):
   global current_time 
   global previous_detection_time 
 
@@ -152,18 +153,17 @@ def controller_based(laser_measurements, goal_position, controller):
   dt = current_control_time - previous_control_time
 
   # if not, we use the controller to compute the commands
-  u, w = controller.compute_commands(center_null, goal_position, dt)
+  u, w = controller.compute_commands(center_null, goal_position, obstacles, dt)
   
 
   # TODO: implement state-space machine to switch between 
   # goal reach and obstacle avoidance 
 
-
-  return u, w, None
+  return u, w
 
 
 # path-based navigation
-def path_based(laser_measurements, goal_position, controller):
+def path_based(obstacles, goal_position, controller):
 
 
   global current_time 
@@ -183,8 +183,7 @@ def path_based(laser_measurements, goal_position, controller):
 
   # now just follow the path nicely, using one of our controllers
   
-  return 0, 0, None
-
+  return 0, 0
 
 
 def run(args): 
@@ -223,13 +222,8 @@ def run(args):
   navigation_method = globals()[args.navigation]
   
   # Get to choose which controller to use
-  if args.controller == "lqr":
-    controller = controllers.lqr(0,0,0,0)
-
-  # this might get out 
-  elif args.controller == "feedbackLinearized":
-    controller = controllers.feedbackLinearized()
-
+  if args.controller == "dynamic":
+    controller = controllers.dynamic()
   elif args.controller == "pid":
     controller = controllers.pid(config.KPu, config.KIu, config.KDu, config.KPw, config.KIw, config.KDw)
   else: # default P controller
@@ -294,7 +288,7 @@ def run(args):
     #   rate_limiter.sleep()
     #   continue
 
-    u, w, current_path = navigation_method(laser.measurements, goal_position, controller)
+    u, w = navigation_method(detector.obstacles, goal_position, controller)
     vel_msg = Twist()
     vel_msg.linear.x = u
     vel_msg.angular.z = w
@@ -333,7 +327,7 @@ if __name__ == '__main__':
   parser.add_argument('--robot', action='store', default='tb3_0', help='Whose robot navigation system to start')
   parser.add_argument('--detector', action='store', default='dumb', help='Choose the type of detector', choices=['dumb', 'average', 'smart'])
   parser.add_argument('--navigation', action='store', default='controller_based', help='Choose the navigation type', choices=['controller_based','path_based'])
-  parser.add_argument('--controller', action='store', default='p', help='Choose the robot controller', choices=['p','pid','lqr', 'feedbackLinearized'])
+  parser.add_argument('--controller', action='store', default='p', help='Choose the robot controller', choices=['p','pid','dynamic'])
   args, unknown = parser.parse_known_args()
   try:
     run(args)

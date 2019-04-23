@@ -12,8 +12,8 @@ def euclidian_norm(first, last=[(0,0)]):
 
 # two separate PIDs, for u and w
 class pid(object): 
-    def __init__(self, Pu=0.5, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
-    # def __init__(self, Pu=1.2, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.01): 
+    # def __init__(self, Pu=0.5, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
+    def __init__(self, Pu=0.3, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.01): 
         self._Pu = Pu
         self._Iu = Iu
         self._Du = Du
@@ -36,16 +36,16 @@ class pid(object):
         self._prev_position = [(0,0)]
     
     # scale it to step response
-    def compute_commands(self, current_pose, goal_position, dt):
+    def compute_commands(self, current_pose, goal_position, obstacles, dt):
         
-        self._distance_error    = euclidian_norm(current_pose[0:2], goal_position) - 2*config.MIN_DISTANCE_TO_TARGET
+        self._distance_error    = euclidian_norm(current_pose[0:2], goal_position) - config.MIN_DISTANCE_TO_TARGET - 3*config.ROBOT_RADIUS
         self._orientation_error = np.arctan2(goal_position[Y], goal_position[X]) - current_pose[YAW]
 
         # compute errors for u and w
-        u_error = self._distance_error * np.cos(self._orientation_error)
+        u_error = self._distance_error #* np.cos(self._orientation_error)
         w_error = self._orientation_error 
 
-        print (self._distance_error)
+        # print (self._distance_error)
         
 
         # compute the integrals
@@ -84,6 +84,16 @@ class pid(object):
 
         return u, w 
 
+class dynamic(object):
+
+    def __init__(self):
+        self._x=0
+
+    
+    # for an obstacle we get x, y, speed_x, speed_y, radius, real_radius
+    def compute_commands(self, current_pose, goal_position, obstacles, dt):
+
+        return 0, 0
 
 
 # class feedbackLinearized(object): 

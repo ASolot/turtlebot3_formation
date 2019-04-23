@@ -74,7 +74,7 @@
     <param name="circles_from_visibles"  value="true"/>
     <param name="discard_converted_segments" value="true"/>
     <!-- Change it -->
-    <param name="transform_coordinates"  value="true"/>
+    <param name="transform_coordinates"  value="false"/>
 
     <param name="min_group_points"     value="3"/>
 
