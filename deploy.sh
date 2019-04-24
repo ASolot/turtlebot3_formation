@@ -50,8 +50,19 @@ if [ "$1" = "real" ]; then
     ./bash/beast_wake_up.sh ${tb3_1_ID} tb3_1
     ./bash/beast_wake_up.sh ${tb3_2_ID} tb3_2
 
-    # have all the networks configured properly
+    # launch navigation -> set up ros master and hostname
 
+    echo "launching tb3_0 navigation"
+    gnome-terminal -x sh -c "ROS_MASTER_URI=$ROS_MASTER_URI; ROS_HOSTNAME=$host_address; python ros/navigation.py --robot=tb3_0"
+    sleep 1
+
+    echo "launching tb3_1 navigation"
+    gnome-terminal -x sh -c "ROS_MASTER_URI=$ROS_MASTER_URI; ROS_HOSTNAME=$host_address; python ros/navigation.py --robot=tb3_1"
+    sleep 1
+
+    echo "launching tb3_2 navigation"
+    gnome-terminal -x sh -c "ROS_MASTER_URI=$ROS_MASTER_URI; ROS_HOSTNAME=$host_address; python ros/navigation.py --robot=tb3_2"
+    sleep 1
 
 
 else
@@ -65,15 +76,15 @@ else
     gnome-terminal -x sh -c "echo 'launching slam'; roslaunch turtlebot3_formation multirobot_slam.launch; bash"
     sleep 2
 
-    # echo "launching leader navigation"
-    # gnome-terminal -x sh -c "echo 'leader navigation'; bash"
-    # sleep 0.5
+    echo "launching tb3_0 navigation"
+    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_0 --detector=dumb --controller=pid; bash"
+    sleep 1
 
-    # echo "launching follower1 navigation"
-    # gnome-terminal -x sh -c "echo 'follower1 navigation'; bash"
-    # sleep 0.5
+    echo "launching tb3_1 navigation"
+    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_1 --detector=dumb --controller=pid; bash"
+    sleep 1
 
-    # echo "launching follower2 navigation"
-    # gnome-terminal -x sh -c "echo 'follower2 navigation'; bash"
-    # sleep 0.5
+    echo "launching tb3_2 navigation"
+    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_2 --detector=dumb --controller=pid; bash"
+    sleep 1
 fi 
