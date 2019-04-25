@@ -41,9 +41,10 @@ if [ "$1" = "real" ]; then
     # bring the beasts alive + clock time
 
     echo "launching the master"
-    gnome-terminal -x sh -c "roscore"
-
+    gnome-terminal -x sh -c "ROS_MASTER_URI=$ROS_MASTER_URI; ROS_HOSTNAME=$host_address; roscore"
     sleep 5
+
+    echo "launching the clock sync script"
     gnome-terminal -x sh -c "ROS_MASTER_URI=$ROS_MASTER_URI; ROS_HOSTNAME=$host_address; roslaunch turtlebot3_formation send_clock.launch"
 
     ./bash/beast_wake_up.sh ${tb3_0_ID} tb3_0

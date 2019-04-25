@@ -199,7 +199,7 @@ class AverageDetector(object):
         # the coords of the object finder are reversed 
         if target[Y] < tolerance and target[Y] > -1.0*tolerance and target[X] > 0:
           # compute distance to target: 
-
+          # print (target)
           distance = euclidian_norm(target)
 
           # get the closest initial obstacle and consider it as 
@@ -211,7 +211,7 @@ class AverageDetector(object):
             self._detectFollowable = False
 
     else:
-      tolerance = config.MAX_DISTANCE_TO_TARGET
+      tolerance = config.MAX_DISTANCE_TO_TARGET*2
 
       potential_positions = []
       indexes             = []
@@ -257,6 +257,7 @@ class AverageDetector(object):
         # we have lost the target
         print ("Target Lost")
         self._detectFollowable = True
+        self._pose = np.array([0,0])
 
     if len(pose) > 0: 
       self._prev_pose = self._pose

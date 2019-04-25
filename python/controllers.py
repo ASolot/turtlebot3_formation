@@ -12,8 +12,8 @@ def euclidian_norm(first, last=[(0,0)]):
 
 # two separate PIDs, for u and w
 class pid(object): 
-    # def __init__(self, Pu=0.5, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.): 
-    def __init__(self, Pu=0.3, Iu=0.01, Du=0.01, Pw=0.1, Iw=0.001, Dw=0.01): 
+    def __init__(self, Pu=0.25, Iu=0, Du=0, Pw=1, Iw=0.0001, Dw=0.): 
+    # def __init__(self, Pu=0.0003, Iu=0.01, Du=0.0, Pw=0.0001, Iw=0.001, Dw=0.0): 
         self._Pu = Pu
         self._Iu = Iu
         self._Du = Du
@@ -42,11 +42,12 @@ class pid(object):
         self._orientation_error = np.arctan2(goal_position[Y], goal_position[X]) - current_pose[YAW]
 
         # compute errors for u and w
-        u_error = self._distance_error #* np.cos(self._orientation_error)
+        u_error = self._distance_error * np.cos(self._orientation_error)
         w_error = self._orientation_error 
 
         # print (self._distance_error)
         
+        print (dt)
 
         # compute the integrals
         self._u_integral += u_error * dt
@@ -81,6 +82,8 @@ class pid(object):
 
         if  np.abs(self._orientation_error) < 0.1: 
             w = 0
+
+        print(u, w, u_error, w_error )
 
         return u, w 
 

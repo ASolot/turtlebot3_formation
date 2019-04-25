@@ -128,6 +128,7 @@ class SimpleLaser(object):
 
 current_time = 0
 previous_detection_time = 0
+previous_publish_time = 0
 
 current_control_time = 0
 previous_control_time = 0
@@ -145,7 +146,7 @@ def controller_based(obstacles, goal_position, controller):
   
   # if the distance to the goal is low, we stop
   if np.sqrt(goal_position[config.X] ** 2 + goal_position[config.Y]**2) <= config.MIN_DISTANCE_TO_TARGET: 
-    return u, w, None
+    return u, w
 
   previous_control_time = current_control_time
   current_control_time = rospy.Time.now().to_sec()
@@ -190,6 +191,7 @@ def run(args):
 
   global current_time 
   global previous_detection_time 
+  global previous_publish_time
 
   global current_control_time 
   global previous_control_time 
@@ -260,16 +262,14 @@ def run(args):
     # if not goal.ready or not slam.ready:
     #   rate_limiter.sleep()
     #   continue
-    
-    # TODO: reshape the main loop 
 
     if not laser.ready: 
       rate_limiter.sleep()
       continue
 
-    # Update goal every 1s.
+    # Update goal
     time_since = current_time - previous_detection_time
-    if time_since > 1.0:
+    if time_since > 0.3:
       detector.find_goal(laser.coordinates)
       # controller.reset()
       previous_detection_time = current_time
@@ -288,11 +288,14 @@ def run(args):
     #   rate_limiter.sleep()
     #   continue
 
-    u, w = navigation_method(detector.obstacles, goal_position, controller)
-    vel_msg = Twist()
-    vel_msg.linear.x = u
-    vel_msg.angular.z = w
-    publisher.publish(vel_msg)
+    time_since = current_time - previous_publish_time
+    if time_since > 0.2:
+      u, w = navigation_method(detector.obstacles, goal_position, controller)
+      vel_msg = Twist()
+      vel_msg.linear.x = u
+      vel_msg.angular.z = w
+      publisher.publish(vel_msg)
+      previous_publish_time = current_time
 
 
     # with open(CONTROLLER_LOG_PATH, 'a') as fp:
@@ -321,6 +324,12 @@ def run(args):
 
 
 if __name__ == '__main__':
+
+  # DBSCAN detector       => --detector=dumb 
+  # dynamic detector      => --detector=average
+
+  # go-to-goal controoler => --controller=pid 
+  # velocity obstacles    => --controller=dynamic
 
   parser = argparse.ArgumentParser(description='Runs navigation for one robot')
   parser.add_argument('--mode', action='store', default='HUMAN_FOLLOWER', help='Which velocity field to plot.', choices=['TURTLE_FOLLOWER', 'HUMAN_FOLLOWER'])
