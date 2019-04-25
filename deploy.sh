@@ -78,14 +78,14 @@ else
     sleep 2
 
     echo "launching tb3_0 navigation"
-    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_0 --detector=dumb --controller=pid; bash"
+    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_0 --detector=average --controller=dynamic; bash"
     sleep 1
 
     echo "launching tb3_1 navigation"
-    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_1 --detector=dumb --controller=pid; bash"
+    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_1 --detector=average --controller=dynamic; bash"
     sleep 1
 
     echo "launching tb3_2 navigation"
-    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_2 --detector=dumb --controller=pid; bash"
+    gnome-terminal -x sh -c "python ros/navigation.py --robot=tb3_2 --detector=average --controller=dynamic; bash"
     sleep 1
 fi 

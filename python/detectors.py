@@ -140,9 +140,9 @@ class AverageDetector(object):
     self._speed = np.array([np.nan, np.nan], dtype=np.float32)
     self._prev_pose = np.array([np.nan, np.nan], dtype=np.float32)
     self._prev_speed = np.array([np.nan, np.nan], dtype=np.float32)
-    self._obstacles     = None
-    self._target_coords = None
-    self._target_speeds = None
+    self._obstacles     = []
+    self._target_coords = []
+    self._target_speeds = []
     self._detectFollowable = True
     rospy.Subscriber(robot_namespace + '/tracked_obstacles', Obstacles, self.callback)
 

@@ -2,11 +2,13 @@ import numpy as np
 import scipy
 import config
 
+from rvo import RVO_update, reach, compute_V_des, reach
+
 X = 0
 Y = 1
 YAW = 2
 
-def euclidian_norm(first, last=[(0,0)]):
+def euclidian_norm(first, last=[0,0]):
   return np.sqrt((first[X] - last[X])**2 + (first[Y] - last[Y])**2)
 
 
@@ -90,13 +92,64 @@ class pid(object):
 class dynamic(object):
 
     def __init__(self):
-        self._x=0
+        #define workspace model
+        self.ws_model = dict()
+        #robot radius
+        self.ws_model['robot_radius'] = 2*config.ROBOT_RADIUS
+        self.ws_model['circular_obstacles'] = []
+        self.ws_model['boundary'] = [] 
+        self.prev_speed = [0,0]
+
 
     
     # for an obstacle we get x, y, speed_x, speed_y, radius, real_radius
     def compute_commands(self, current_pose, goal_position, obstacles, dt):
 
-        return 0, 0
+        if obstacles == None:
+            return 0, 0
+
+        if euclidian_norm(goal_position) < config.MIN_DISTANCE_TO_TARGET + 2*config.ROBOT_RADIUS:
+            return 0, 0
+
+        X_c     = []
+        V_c     = []
+        goal    = []
+        V_max = [config.SPEED/2 for i in range(len(obstacles)+1)]
+
+        # data for the first robot, which is our robot
+        X_c.append([0,0])
+        V_c.append(self.prev_speed)
+        goal.append(goal_position)
+        
+        # print (V)
+        for obstacle in obstacles:
+            X_c.append([obstacle[0], obstacle[1]])
+            V_c.append([obstacle[2], obstacle[3]])
+            goal.append([0,0]) # we simulate that each obstacle wants to go to the goal
+
+        V_des = compute_V_des(X_c, goal, V_max)
+        # print (V)
+        # compute the optimal vel to avoid collision
+        V_c = RVO_update(X_c, V_des, V_c, self.ws_model)
+        
+        velocity = V_c[0]
+
+        # compute the yaw from the actual speed
+        yaw = np.arctan2(velocity[Y], velocity[X])
+
+        # feedback linearization
+        u = velocity[X] * np.cos(yaw) + velocity[Y] * np.sin(yaw)
+        w = 1.0 / 0.001 * ( -1.0 * velocity[X] * np.sin(yaw) + velocity[Y] * np.cos(yaw))
+
+        print (u, w, yaw, velocity[0], velocity[1])
+
+        if u > config.SPEED:
+            u = config.SPEED
+        
+        if np.abs(w) > config.SPEED:
+            w = w/w*config.SPEED
+
+        return u, w
 
 
 # class feedbackLinearized(object): 
