@@ -1,0 +1,326 @@
+... logging to /home/user/.ros/log/25a80cf6-9bf6-11eb-8bf0-0242c0a85007/roslaunch-1_xterm-12071.log
+Checking log directory for disk usage. This may take a while.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+]2;/home/user/catkin_ws/src/turtlebot3_formation/ros/launch/multirobot_slam.launch
+[1mstarted roslaunch server http://1_xterm:37447/[0m
+
+SUMMARY
+========
+
+PARAMETERS
+ * /map_merge/discovery_rate: 0.05
+ * /map_merge/estimation_confidence: 1.0
+ * /map_merge/estimation_rate: 0.1
+ * /map_merge/known_init_poses: False
+ * /map_merge/merged_map_topic: map
+ * /map_merge/merging_rate: 0.5
+ * /map_merge/robot_map_topic: map
+ * /map_merge/robot_namespace: tb3
+ * /map_merge/world_frame: map
+ * /rosdistro: noetic
+ * /rosversion: 1.15.9
+ * /tb3_0/map_merge/init_pose_x: -7.0
+ * /tb3_0/map_merge/init_pose_y: -1.0
+ * /tb3_0/map_merge/init_pose_yaw: 0.0
+ * /tb3_0/map_merge/init_pose_z: 0.0
+ * /tb3_0/nodelet_manager/num_worker_threads: 20
+ * /tb3_0/obstacle_extractor/active: True
+ * /tb3_0/obstacle_extractor/circles_from_visibles: True
+ * /tb3_0/obstacle_extractor/discard_converted_segments: True
+ * /tb3_0/obstacle_extractor/distance_proportion: 0.00628
+ * /tb3_0/obstacle_extractor/frame_id: map
+ * /tb3_0/obstacle_extractor/max_circle_radius: 0.3
+ * /tb3_0/obstacle_extractor/max_group_distance: 0.1
+ * /tb3_0/obstacle_extractor/max_merge_separation: 0.09
+ * /tb3_0/obstacle_extractor/max_merge_spread: 0.1
+ * /tb3_0/obstacle_extractor/max_split_distance: 0.2
+ * /tb3_0/obstacle_extractor/min_group_points: 3
+ * /tb3_0/obstacle_extractor/radius_enlargement: 0.2
+ * /tb3_0/obstacle_extractor/transform_coordinates: False
+ * /tb3_0/obstacle_extractor/use_pcl: False
+ * /tb3_0/obstacle_extractor/use_scan: True
+ * /tb3_0/obstacle_extractor/use_split_and_merge: True
+ * /tb3_0/obstacle_publisher/active: False
+ * /tb3_0/obstacle_publisher/fission_example: False
+ * /tb3_0/obstacle_publisher/frame_id: map
+ * /tb3_0/obstacle_publisher/fusion_example: False
+ * /tb3_0/obstacle_publisher/loop_rate: 10.0
+ * /tb3_0/obstacle_publisher/r_vector: [0.5, 0.5, 1.5, 0...
+ * /tb3_0/obstacle_publisher/radius_margin: 0.25
+ * /tb3_0/obstacle_publisher/reset: False
+ * /tb3_0/obstacle_publisher/vx_vector: [0.0, 0.0, 0.0, 0...
+ * /tb3_0/obstacle_publisher/vy_vector: [0.0, 0.0, 0.0, 0...
+ * /tb3_0/obstacle_publisher/x_vector: [-3.0, -2.5, -2.5...
+ * /tb3_0/obstacle_publisher/y_vector: [1.5, 0.0, -2.5, ...
+ * /tb3_0/obstacle_tracker/active: True
+ * /tb3_0/obstacle_tracker/frame_id: map
+ * /tb3_0/obstacle_tracker/loop_rate: 100.0
+ * /tb3_0/obstacle_tracker/measurement_variance: 1.0
+ * /tb3_0/obstacle_tracker/min_correspondence_cost: 0.6
+ * /tb3_0/obstacle_tracker/process_rate_variance: 0.1
+ * /tb3_0/obstacle_tracker/process_variance: 0.1
+ * /tb3_0/obstacle_tracker/std_correspondence_dev: 0.15
+ * /tb3_0/obstacle_tracker/tracking_duration: 2.0
+ * /tb3_0/robot_description: <?xml version="1....
+ * /tb3_0/robot_state_publisher/publish_frequency: 50.0
+ * /tb3_0/robot_state_publisher/tf_prefix: tb3_0
+ * /tb3_0/turtlebot3_slam_gmapping/angularUpdate: 0.2
+ * /tb3_0/turtlebot3_slam_gmapping/astep: 0.05
+ * /tb3_0/turtlebot3_slam_gmapping/base_frame: tb3_0/base_footprint
+ * /tb3_0/turtlebot3_slam_gmapping/delta: 0.05
+ * /tb3_0/turtlebot3_slam_gmapping/iterations: 5
+ * /tb3_0/turtlebot3_slam_gmapping/kernelSize: 1
+ * /tb3_0/turtlebot3_slam_gmapping/lasamplerange: 0.005
+ * /tb3_0/turtlebot3_slam_gmapping/lasamplestep: 0.005
+ * /tb3_0/turtlebot3_slam_gmapping/linearUpdate: 0.2
+ * /tb3_0/turtlebot3_slam_gmapping/llsamplerange: 0.01
+ * /tb3_0/turtlebot3_slam_gmapping/llsamplestep: 0.01
+ * /tb3_0/turtlebot3_slam_gmapping/lsigma: 0.075
+ * /tb3_0/turtlebot3_slam_gmapping/lskip: 0
+ * /tb3_0/turtlebot3_slam_gmapping/lstep: 0.05
+ * /tb3_0/turtlebot3_slam_gmapping/map_frame: tb3_0/map
+ * /tb3_0/turtlebot3_slam_gmapping/map_update_interval: 2.0
+ * /tb3_0/turtlebot3_slam_gmapping/maxUrange: 4.0
+ * /tb3_0/turtlebot3_slam_gmapping/minimumScore: 100
+ * /tb3_0/turtlebot3_slam_gmapping/odom_frame: tb3_0/odom
+ * /tb3_0/turtlebot3_slam_gmapping/ogain: 3.0
+ * /tb3_0/turtlebot3_slam_gmapping/particles: 120
+ * /tb3_0/turtlebot3_slam_gmapping/resampleThreshold: 0.5
+ * /tb3_0/turtlebot3_slam_gmapping/sigma: 0.05
+ * /tb3_0/turtlebot3_slam_gmapping/srr: 0.01
+ * /tb3_0/turtlebot3_slam_gmapping/srt: 0.02
+ * /tb3_0/turtlebot3_slam_gmapping/str: 0.01
+ * /tb3_0/turtlebot3_slam_gmapping/stt: 0.02
+ * /tb3_0/turtlebot3_slam_gmapping/temporalUpdate: 0.5
+ * /tb3_0/turtlebot3_slam_gmapping/xmax: 10.0
+ * /tb3_0/turtlebot3_slam_gmapping/xmin: -10.0
+ * /tb3_0/turtlebot3_slam_gmapping/ymax: 10.0
+ * /tb3_0/turtlebot3_slam_gmapping/ymin: -10.0
+ * /tb3_1/map_merge/init_pose_x: 7.0
+ * /tb3_1/map_merge/init_pose_y: -1.0
+ * /tb3_1/map_merge/init_pose_yaw: 0.0
+ * /tb3_1/map_merge/init_pose_z: 0.0
+ * /tb3_1/nodelet_manager/num_worker_threads: 20
+ * /tb3_1/obstacle_extractor/active: True
+ * /tb3_1/obstacle_extractor/circles_from_visibles: True
+ * /tb3_1/obstacle_extractor/discard_converted_segments: True
+ * /tb3_1/obstacle_extractor/distance_proportion: 0.00628
+ * /tb3_1/obstacle_extractor/frame_id: map
+ * /tb3_1/obstacle_extractor/max_circle_radius: 0.3
+ * /tb3_1/obstacle_extractor/max_group_distance: 0.1
+ * /tb3_1/obstacle_extractor/max_merge_separation: 0.09
+ * /tb3_1/obstacle_extractor/max_merge_spread: 0.1
+ * /tb3_1/obstacle_extractor/max_split_distance: 0.2
+ * /tb3_1/obstacle_extractor/min_group_points: 3
+ * /tb3_1/obstacle_extractor/radius_enlargement: 0.2
+ * /tb3_1/obstacle_extractor/transform_coordinates: False
+ * /tb3_1/obstacle_extractor/use_pcl: False
+ * /tb3_1/obstacle_extractor/use_scan: True
+ * /tb3_1/obstacle_extractor/use_split_and_merge: True
+ * /tb3_1/obstacle_publisher/active: False
+ * /tb3_1/obstacle_publisher/fission_example: False
+ * /tb3_1/obstacle_publisher/frame_id: map
+ * /tb3_1/obstacle_publisher/fusion_example: False
+ * /tb3_1/obstacle_publisher/loop_rate: 10.0
+ * /tb3_1/obstacle_publisher/r_vector: [0.5, 0.5, 1.5, 0...
+ * /tb3_1/obstacle_publisher/radius_margin: 0.25
+ * /tb3_1/obstacle_publisher/reset: False
+ * /tb3_1/obstacle_publisher/vx_vector: [0.0, 0.0, 0.0, 0...
+ * /tb3_1/obstacle_publisher/vy_vector: [0.0, 0.0, 0.0, 0...
+ * /tb3_1/obstacle_publisher/x_vector: [-3.0, -2.5, -2.5...
+ * /tb3_1/obstacle_publisher/y_vector: [1.5, 0.0, -2.5, ...
+ * /tb3_1/obstacle_tracker/active: True
+ * /tb3_1/obstacle_tracker/frame_id: map
+ * /tb3_1/obstacle_tracker/loop_rate: 100.0
+ * /tb3_1/obstacle_tracker/measurement_variance: 1.0
+ * /tb3_1/obstacle_tracker/min_correspondence_cost: 0.6
+ * /tb3_1/obstacle_tracker/process_rate_variance: 0.1
+ * /tb3_1/obstacle_tracker/process_variance: 0.1
+ * /tb3_1/obstacle_tracker/std_correspondence_dev: 0.15
+ * /tb3_1/obstacle_tracker/tracking_duration: 2.0
+ * /tb3_1/robot_description: <?xml version="1....
+ * /tb3_1/robot_state_publisher/publish_frequency: 50.0
+ * /tb3_1/robot_state_publisher/tf_prefix: tb3_1
+ * /tb3_1/turtlebot3_slam_gmapping/angularUpdate: 0.2
+ * /tb3_1/turtlebot3_slam_gmapping/astep: 0.05
+ * /tb3_1/turtlebot3_slam_gmapping/base_frame: tb3_1/base_footprint
+ * /tb3_1/turtlebot3_slam_gmapping/delta: 0.05
+ * /tb3_1/turtlebot3_slam_gmapping/iterations: 5
+ * /tb3_1/turtlebot3_slam_gmapping/kernelSize: 1
+ * /tb3_1/turtlebot3_slam_gmapping/lasamplerange: 0.005
+ * /tb3_1/turtlebot3_slam_gmapping/lasamplestep: 0.005
+ * /tb3_1/turtlebot3_slam_gmapping/linearUpdate: 0.2
+ * /tb3_1/turtlebot3_slam_gmapping/llsamplerange: 0.01
+ * /tb3_1/turtlebot3_slam_gmapping/llsamplestep: 0.01
+ * /tb3_1/turtlebot3_slam_gmapping/lsigma: 0.075
+ * /tb3_1/turtlebot3_slam_gmapping/lskip: 0
+ * /tb3_1/turtlebot3_slam_gmapping/lstep: 0.05
+ * /tb3_1/turtlebot3_slam_gmapping/map_frame: tb3_1/map
+ * /tb3_1/turtlebot3_slam_gmapping/map_update_interval: 2.0
+ * /tb3_1/turtlebot3_slam_gmapping/maxUrange: 4.0
+ * /tb3_1/turtlebot3_slam_gmapping/minimumScore: 100
+ * /tb3_1/turtlebot3_slam_gmapping/odom_frame: tb3_1/odom
+ * /tb3_1/turtlebot3_slam_gmapping/ogain: 3.0
+ * /tb3_1/turtlebot3_slam_gmapping/particles: 120
+ * /tb3_1/turtlebot3_slam_gmapping/resampleThreshold: 0.5
+ * /tb3_1/turtlebot3_slam_gmapping/sigma: 0.05
+ * /tb3_1/turtlebot3_slam_gmapping/srr: 0.01
+ * /tb3_1/turtlebot3_slam_gmapping/srt: 0.02
+ * /tb3_1/turtlebot3_slam_gmapping/str: 0.01
+ * /tb3_1/turtlebot3_slam_gmapping/stt: 0.02
+ * /tb3_1/turtlebot3_slam_gmapping/temporalUpdate: 0.5
+ * /tb3_1/turtlebot3_slam_gmapping/xmax: 10.0
+ * /tb3_1/turtlebot3_slam_gmapping/xmin: -10.0
+ * /tb3_1/turtlebot3_slam_gmapping/ymax: 10.0
+ * /tb3_1/turtlebot3_slam_gmapping/ymin: -10.0
+ * /tb3_2/map_merge/init_pose_x: 0.5
+ * /tb3_2/map_merge/init_pose_y: 3.0
+ * /tb3_2/map_merge/init_pose_yaw: 0.0
+ * /tb3_2/map_merge/init_pose_z: 0.0
+ * /tb3_2/nodelet_manager/num_worker_threads: 20
+ * /tb3_2/obstacle_extractor/active: True
+ * /tb3_2/obstacle_extractor/circles_from_visibles: True
+ * /tb3_2/obstacle_extractor/discard_converted_segments: True
+ * /tb3_2/obstacle_extractor/distance_proportion: 0.00628
+ * /tb3_2/obstacle_extractor/frame_id: map
+ * /tb3_2/obstacle_extractor/max_circle_radius: 0.3
+ * /tb3_2/obstacle_extractor/max_group_distance: 0.1
+ * /tb3_2/obstacle_extractor/max_merge_separation: 0.09
+ * /tb3_2/obstacle_extractor/max_merge_spread: 0.1
+ * /tb3_2/obstacle_extractor/max_split_distance: 0.2
+ * /tb3_2/obstacle_extractor/min_group_points: 3
+ * /tb3_2/obstacle_extractor/radius_enlargement: 0.2
+ * /tb3_2/obstacle_extractor/transform_coordinates: False
+ * /tb3_2/obstacle_extractor/use_pcl: False
+ * /tb3_2/obstacle_extractor/use_scan: True
+ * /tb3_2/obstacle_extractor/use_split_and_merge: True
+ * /tb3_2/obstacle_publisher/active: False
+ * /tb3_2/obstacle_publisher/fission_example: False
+ * /tb3_2/obstacle_publisher/frame_id: map
+ * /tb3_2/obstacle_publisher/fusion_example: False
+ * /tb3_2/obstacle_publisher/loop_rate: 10.0
+ * /tb3_2/obstacle_publisher/r_vector: [0.5, 0.5, 1.5, 0...
+ * /tb3_2/obstacle_publisher/radius_margin: 0.25
+ * /tb3_2/obstacle_publisher/reset: False
+ * /tb3_2/obstacle_publisher/vx_vector: [0.0, 0.0, 0.0, 0...
+ * /tb3_2/obstacle_publisher/vy_vector: [0.0, 0.0, 0.0, 0...
+ * /tb3_2/obstacle_publisher/x_vector: [-3.0, -2.5, -2.5...
+ * /tb3_2/obstacle_publisher/y_vector: [1.5, 0.0, -2.5, ...
+ * /tb3_2/obstacle_tracker/active: True
+ * /tb3_2/obstacle_tracker/frame_id: map
+ * /tb3_2/obstacle_tracker/loop_rate: 100.0
+ * /tb3_2/obstacle_tracker/measurement_variance: 1.0
+ * /tb3_2/obstacle_tracker/min_correspondence_cost: 0.6
+ * /tb3_2/obstacle_tracker/process_rate_variance: 0.1
+ * /tb3_2/obstacle_tracker/process_variance: 0.1
+ * /tb3_2/obstacle_tracker/std_correspondence_dev: 0.15
+ * /tb3_2/obstacle_tracker/tracking_duration: 2.0
+ * /tb3_2/robot_description: <?xml version="1....
+ * /tb3_2/robot_state_publisher/publish_frequency: 50.0
+ * /tb3_2/robot_state_publisher/tf_prefix: tb3_2
+ * /tb3_2/turtlebot3_slam_gmapping/angularUpdate: 0.2
+ * /tb3_2/turtlebot3_slam_gmapping/astep: 0.05
+ * /tb3_2/turtlebot3_slam_gmapping/base_frame: tb3_2/base_footprint
+ * /tb3_2/turtlebot3_slam_gmapping/delta: 0.05
+ * /tb3_2/turtlebot3_slam_gmapping/iterations: 5
+ * /tb3_2/turtlebot3_slam_gmapping/kernelSize: 1
+ * /tb3_2/turtlebot3_slam_gmapping/lasamplerange: 0.005
+ * /tb3_2/turtlebot3_slam_gmapping/lasamplestep: 0.005
+ * /tb3_2/turtlebot3_slam_gmapping/linearUpdate: 0.2
+ * /tb3_2/turtlebot3_slam_gmapping/llsamplerange: 0.01
+ * /tb3_2/turtlebot3_slam_gmapping/llsamplestep: 0.01
+ * /tb3_2/turtlebot3_slam_gmapping/lsigma: 0.075
+ * /tb3_2/turtlebot3_slam_gmapping/lskip: 0
+ * /tb3_2/turtlebot3_slam_gmapping/lstep: 0.05
+ * /tb3_2/turtlebot3_slam_gmapping/map_frame: tb3_2/map
+ * /tb3_2/turtlebot3_slam_gmapping/map_update_interval: 2.0
+ * /tb3_2/turtlebot3_slam_gmapping/maxUrange: 4.0
+ * /tb3_2/turtlebot3_slam_gmapping/minimumScore: 100
+ * /tb3_2/turtlebot3_slam_gmapping/odom_frame: tb3_2/odom
+ * /tb3_2/turtlebot3_slam_gmapping/ogain: 3.0
+ * /tb3_2/turtlebot3_slam_gmapping/particles: 120
+ * /tb3_2/turtlebot3_slam_gmapping/resampleThreshold: 0.5
+ * /tb3_2/turtlebot3_slam_gmapping/sigma: 0.05
+ * /tb3_2/turtlebot3_slam_gmapping/srr: 0.01
+ * /tb3_2/turtlebot3_slam_gmapping/srt: 0.02
+ * /tb3_2/turtlebot3_slam_gmapping/str: 0.01
+ * /tb3_2/turtlebot3_slam_gmapping/stt: 0.02
+ * /tb3_2/turtlebot3_slam_gmapping/temporalUpdate: 0.5
+ * /tb3_2/turtlebot3_slam_gmapping/xmax: 10.0
+ * /tb3_2/turtlebot3_slam_gmapping/xmin: -10.0
+ * /tb3_2/turtlebot3_slam_gmapping/ymax: 10.0
+ * /tb3_2/turtlebot3_slam_gmapping/ymin: -10.0
+
+NODES
+  /
+    map_merge (multirobot_map_merge/map_merge)
+    rviz (rviz/rviz)
+    world_to_tb3_0_tf_broadcaster (tf/static_transform_publisher)
+    world_to_tb3_1_tf_broadcaster (tf/static_transform_publisher)
+    world_to_tb3_2_tf_broadcaster (tf/static_transform_publisher)
+  /tb3_0/
+    nodelet_manager (nodelet/nodelet)
+    obstacle_extractor (nodelet/nodelet)
+    obstacle_publisher (nodelet/nodelet)
+    obstacle_tracker (nodelet/nodelet)
+    robot_state_publisher (robot_state_publisher/robot_state_publisher)
+    turtlebot3_slam_gmapping (gmapping/slam_gmapping)
+  /tb3_1/
+    nodelet_manager (nodelet/nodelet)
+    obstacle_extractor (nodelet/nodelet)
+    obstacle_publisher (nodelet/nodelet)
+    obstacle_tracker (nodelet/nodelet)
+    robot_state_publisher (robot_state_publisher/robot_state_publisher)
+    turtlebot3_slam_gmapping (gmapping/slam_gmapping)
+  /tb3_2/
+    nodelet_manager (nodelet/nodelet)
+    obstacle_extractor (nodelet/nodelet)
+    obstacle_publisher (nodelet/nodelet)
+    obstacle_tracker (nodelet/nodelet)
+    robot_state_publisher (robot_state_publisher/robot_state_publisher)
+    turtlebot3_slam_gmapping (gmapping/slam_gmapping)
+[0m[ INFO] [1618277212.805718855]: Initializing nodelet with 20 worker threads.[0m
+[0m[ INFO] [1618277212.714128315]: Initializing nodelet with 20 worker threads.[0m
+[0m[ INFO] [1618277212.819011169]: Initializing nodelet with 20 worker threads.[0m
+
+[1mROS_MASTER_URI=http://1_xterm:11311[0m
+]2;/home/user/catkin_ws/src/turtlebot3_formation/ros/launch/multirobot_slam.launch http://1_xterm:11311
+[1mprocess[tb3_0/turtlebot3_slam_gmapping-1]: started with pid [12106][0m
+[1mprocess[tb3_1/turtlebot3_slam_gmapping-2]: started with pid [12107][0m
+[1mprocess[tb3_2/turtlebot3_slam_gmapping-3]: started with pid [12108][0m
+[1mprocess[tb3_0/robot_state_publisher-4]: started with pid [12109][0m
+[1mprocess[tb3_0/nodelet_manager-5]: started with pid [12118][0m
+[1mprocess[tb3_0/obstacle_extractor-6]: started with pid [12126][0m
+[1mprocess[tb3_0/obstacle_tracker-7]: started with pid [12128][0m
+[1mprocess[tb3_0/obstacle_publisher-8]: started with pid [12129][0m
+[1mprocess[tb3_1/robot_state_publisher-9]: started with pid [12137][0m
+[1mprocess[tb3_1/nodelet_manager-10]: started with pid [12145][0m
+[1mprocess[tb3_1/obstacle_extractor-11]: started with pid [12146][0m
+[1mprocess[tb3_1/obstacle_tracker-12]: started with pid [12147][0m
+[1mprocess[tb3_1/obstacle_publisher-13]: started with pid [12149][0m
+[1mprocess[tb3_2/robot_state_publisher-14]: started with pid [12152][0m
+[1mprocess[tb3_2/nodelet_manager-15]: started with pid [12154][0m
+[1mprocess[tb3_2/obstacle_extractor-16]: started with pid [12162][0m
+[1mprocess[tb3_2/obstacle_tracker-17]: started with pid [12169][0m
+[1mprocess[tb3_2/obstacle_publisher-18]: started with pid [12177][0m
+[1mprocess[world_to_tb3_0_tf_broadcaster-20]: started with pid [12190][0m
+[1mprocess[world_to_tb3_1_tf_broadcaster-21]: started with pid [12199][0m
+[1mprocess[world_to_tb3_2_tf_broadcaster-22]: started with pid [12202][0m
+[1mprocess[rviz-23]: started with pid [12211][0m
+[rviz-23] killing on exit
+[world_to_tb3_2_tf_broadcaster-22] killing on exit
+[world_to_tb3_1_tf_broadcaster-21] killing on exit
+[world_to_tb3_0_tf_broadcaster-20] killing on exit
+[tb3_2/nodelet_manager-15] killing on exit
+[tb3_2/robot_state_publisher-14] killing on exit
+[tb3_1/nodelet_manager-10] killing on exit
+[tb3_1/robot_state_publisher-9] killing on exit
+[tb3_0/nodelet_manager-5] killing on exit
+[tb3_0/robot_state_publisher-4] killing on exit
+[tb3_2/turtlebot3_slam_gmapping-3] killing on exit
+[tb3_1/turtlebot3_slam_gmapping-2] killing on exit
+[tb3_0/turtlebot3_slam_gmapping-1] killing on exit
+shutting down processing monitor...
+... shutting down processing monitor complete
+[1mdone[0m

@@ -74,7 +74,8 @@ class SimpleLaser(object):
   def __init__(self, robot_namespace=config.ROBOT0):
     self._name_space = robot_namespace
     rospy.Subscriber(robot_namespace + '/scan', LaserScan, self.callback)
-    self._angles_degrees = np.array(range(0, config.DEGREES_FIELD_OF_VIEW + 1, config.DEGREES_FIELD_RESOLUTION) + range(360 - config.DEGREES_FIELD_OF_VIEW, 359, config.DEGREES_FIELD_RESOLUTION))
+    self._angles_degrees = np.array(list(range(0, config.DEGREES_FIELD_OF_VIEW + 1, config.DEGREES_FIELD_RESOLUTION)) + list(range(360 - config.DEGREES_FIELD_OF_VIEW, 359, config.DEGREES_FIELD_RESOLUTION)))
+    # self._angles_degrees = np.array(range(0, config.DEGREES_FIELD_OF_VIEW + 1, config.DEGREES_FIELD_RESOLUTION)) + np.array(range(360 - config.DEGREES_FIELD_OF_VIEW, 359, config.DEGREES_FIELD_RESOLUTION))
     self._angles = np.pi / 180. * self._angles_degrees
     self._width = np.pi / 180. * config.DEGREES_CONE_OF_VIEW
     self._measurements = [float('inf')] * len(self._angles)
