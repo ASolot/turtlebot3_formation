@@ -274,20 +274,23 @@ def run(args):
     #   continue
 
     if not laser.ready: 
-      rate_limiter.sleep()
-      continue
+        print('Waiting for laser')
+        rate_limiter.sleep()
+        continue
 
     # Update goal
     time_since = current_time - previous_detection_time
     if time_since > 0.3:
-      detector.find_goal(laser.coordinates)
-      # controller.reset()
-      previous_detection_time = current_time
+        print('Start to find goal, laser_coordinates=',laser.coordinates)
+        detector.find_goal(laser.coordinates)
+        # controller.reset()
+        previous_detection_time = current_time
       
     # Nothing from the detector yet? sleep!
     if not detector.ready:
-      rate_limiter.sleep()
-      continue
+        print('Waiting for detector')
+        rate_limiter.sleep()
+        continue
 
     # returns the coordinate and the type of object for dumb detector
     goal_position = detector.goal_pose
@@ -297,7 +300,7 @@ def run(args):
     #   publisher.publish(stop_msg)
     #   rate_limiter.sleep()
     #   continue
-
+    print('goal:',detector.goal_pose,'obs:',detector.obstacle)
     time_since = current_time - previous_publish_time
     if time_since > 0.2:
       u, w = navigation_method(detector.obstacles, goal_position, controller)
