@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+'''
+Function: 
+    call detector.py (input sensor data(data was wrapped by simpleLaser), output obs/goal position)
+    call controller.py (input goal and obs, output control command)
+    in loop
+        call detector get obs and goal
+        call controller get u,w
+        publish data to control
+'''
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -232,7 +242,6 @@ def run(args):
   else: # default P controller
     controller = controllers.pid()
   
-
   # slam = SLAM()
   # goal = GoalPose()
   frame_id = 0

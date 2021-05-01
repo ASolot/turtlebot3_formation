@@ -1,6 +1,12 @@
+<!-- 
+    1. call multi_tur_slam.launch(call gmapping)
+    2. call slam.launch to detect obstacles
+    3. call multirobot_map_merge to merge map
+ -->
 <launch>
 
   <!-- Start slam -->
+  <!-- start gmapping -->
   <include file="$(find turtlebot3_gazebo)/launch/multi_turtlebot3_slam.launch">
     <arg name="ns" value="tb3_0"/>
   </include>

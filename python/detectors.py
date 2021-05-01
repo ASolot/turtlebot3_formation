@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+'''
+Function: publish obstacle information to topic opened in slam.launch
+
+'''
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -38,7 +43,6 @@ def euclidian_norm(first, last=[0,0]):
 
 # The DUMB_DETECTOR looks for the closest points that could be clustered 
 # then looks at the clusters, and how they have moved, and  
-
 # for human detection, we look for two such semi-circles
 class DumbDetector(object):
   def __init__(self, robot_namespace, robot_role) : 
