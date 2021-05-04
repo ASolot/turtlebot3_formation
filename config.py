@@ -15,9 +15,9 @@ OCCUPIED = 2
 # Robot-related parameters
 ROBOT_RADIUS = 0.105 / 2.
 
-SPEED = .2
-REVERSE_SPEED = -0.05
-MAX_W = 40.0 * np.pi / 180.0
+SPEED = 2 # change 0.2
+REVERSE_SPEED = -0.5 # .05
+MAX_W = 400.0 * np.pi / 180.0 # 40.0 * np.pi / 180.0
 MAX_ACCEL = 0.1  # maximum acceleration [m/ss]
 MAX_W_ACCEL = 40.0 * np.pi / 180.0
 EPSILON = .1

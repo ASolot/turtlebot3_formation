@@ -1,0 +1,38 @@
+<!-- 
+    1. call multi_tur_slam.launch(call gmapping)
+    2. call slam.launch to detect obstacles
+    3. call multirobot_map_merge to merge map
+ -->
+<launch>
+  <arg name="first_tb3"  default="tb3_0"/>
+  <arg name="second_tb3" default="tb3_1"/>
+  <arg name="third_tb3"  default="tb3_2"/>
+
+  <group ns="$(arg first_tb3)">
+    <include file="$(find turtlebot3_formation)/ros/launch/slam.launch">
+      <arg name="namespace" value="$(arg first_tb3)"/>
+    </include>
+  </group>
+
+  <group ns="$(arg second_tb3)">
+    <include file="$(find turtlebot3_formation)/ros/launch/slam.launch">
+      <arg name="namespace" value="$(arg second_tb3)"/>
+    </include>
+  </group>
+  
+  <group ns="$(arg third_tb3)">
+    <include file="$(find turtlebot3_formation)/ros/launch/slam.launch">
+      <arg name="namespace" value="$(arg third_tb3)"/>
+    </include>
+  </group>
+
+  <!-- 
+       Default -Open rViz config to true for local rviz client. 
+       Allows override to disable it for RoboMaker. See hello_world_aws.launch. 
+  -->
+  <arg name="open_rviz_config" default="true"/>
+  <group if="$(arg open_rviz_config)">
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot3_formation)/ros/rviz/turtlebot3_formation_slam.rviz"/>
+  </group>
+
+</launch>

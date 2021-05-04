@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+'''
+Function: 
+    call detector.py (input sensor data(data was wrapped by simpleLaser), output obs/goal position)
+    call controller.py (input goal and obs, output control command)
+    in loop
+        call detector get obs and goal
+        call controller get u,w
+        publish data to control
+'''
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -74,7 +84,8 @@ class SimpleLaser(object):
   def __init__(self, robot_namespace=config.ROBOT0):
     self._name_space = robot_namespace
     rospy.Subscriber(robot_namespace + '/scan', LaserScan, self.callback)
-    self._angles_degrees = np.array(range(0, config.DEGREES_FIELD_OF_VIEW + 1, config.DEGREES_FIELD_RESOLUTION) + range(360 - config.DEGREES_FIELD_OF_VIEW, 359, config.DEGREES_FIELD_RESOLUTION))
+    self._angles_degrees = np.array(list(range(0, config.DEGREES_FIELD_OF_VIEW + 1, config.DEGREES_FIELD_RESOLUTION)) + list(range(360 - config.DEGREES_FIELD_OF_VIEW, 359, config.DEGREES_FIELD_RESOLUTION)))
+    # self._angles_degrees = np.array(range(0, config.DEGREES_FIELD_OF_VIEW + 1, config.DEGREES_FIELD_RESOLUTION)) + np.array(range(360 - config.DEGREES_FIELD_OF_VIEW, 359, config.DEGREES_FIELD_RESOLUTION))
     self._angles = np.pi / 180. * self._angles_degrees
     self._width = np.pi / 180. * config.DEGREES_CONE_OF_VIEW
     self._measurements = [float('inf')] * len(self._angles)
@@ -231,7 +242,6 @@ def run(args):
   else: # default P controller
     controller = controllers.pid()
   
-
   # slam = SLAM()
   # goal = GoalPose()
   frame_id = 0
@@ -264,20 +274,22 @@ def run(args):
     #   continue
 
     if not laser.ready: 
-      rate_limiter.sleep()
-      continue
+        print('Waiting for laser')
+        rate_limiter.sleep()
+        continue
 
     # Update goal
     time_since = current_time - previous_detection_time
     if time_since > 0.3:
-      detector.find_goal(laser.coordinates)
-      # controller.reset()
-      previous_detection_time = current_time
+        detector.find_goal(laser.coordinates)
+        # controller.reset()
+        previous_detection_time = current_time
       
     # Nothing from the detector yet? sleep!
     if not detector.ready:
-      rate_limiter.sleep()
-      continue
+        print('Waiting for detector')
+        rate_limiter.sleep()
+        continue
 
     # returns the coordinate and the type of object for dumb detector
     goal_position = detector.goal_pose
@@ -287,7 +299,6 @@ def run(args):
     #   publisher.publish(stop_msg)
     #   rate_limiter.sleep()
     #   continue
-
     time_since = current_time - previous_publish_time
     if time_since > 0.2:
       u, w = navigation_method(detector.obstacles, goal_position, controller)

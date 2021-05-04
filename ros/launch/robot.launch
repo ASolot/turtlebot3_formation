@@ -1,3 +1,4 @@
+<!-- call gazebo_ros to spawn turtlebot -->
 <launch>
   <arg name="model"/>
   <arg name="x_pos"/>
