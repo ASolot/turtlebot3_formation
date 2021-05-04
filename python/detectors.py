@@ -175,7 +175,6 @@ class AverageDetector(object):
         target_speeds.append(np.array([msg.circles[idx].velocity.x, 
                                       msg.circles[idx].velocity.y
                                       ], dtype=np.float64))
-    print(target_coords)
     self._obstacles = obstacles
     self._target_coords = target_coords
     self._target_speeds = target_speeds
@@ -183,8 +182,6 @@ class AverageDetector(object):
 
   # based on the filtered obstacles, last tracked obstacle position, etc, find the goal 
   def find_goal(self, coordinates):
-    print ("Finding goal,_target_coords=",self._target_coords,',detectFollowable=',self._detectFollowable)
-
     pose = []
     speed = []
     if not self._target_coords:
@@ -195,9 +192,7 @@ class AverageDetector(object):
     if self._detectFollowable:
       tolerance = config.MAX_INITIAL_VIEW_WIDTH
       min_distance = config.MAX_DISTANCE_TO_TARGET
-      print('target_coord',self._target_coords)
       for idx, target in enumerate(self._target_coords): 
-        print (target)
         # check if in our field of view -> forward and between some [-x, x] coords
         # the coords of the object finder are reversed 
         if target[Y] < tolerance and target[Y] > -1.0*tolerance and target[X] > 0:
@@ -242,7 +237,7 @@ class AverageDetector(object):
 
       # simple
       if len(potential_positions) > 0:
-        print('potential_pos=',potential_positions)
+        # print('potential_pos=',potential_positions)
         # we take the closest yet again 
         min_distance = config.MAX_DISTANCE_TO_TARGET
         for idx, target in enumerate(potential_positions):
@@ -267,7 +262,7 @@ class AverageDetector(object):
       self._pose = pose
       self._speed = speed
       print ("Target found")
-      print (pose)
+    #   print (pose)
 
   @property
   def ready(self):

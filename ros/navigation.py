@@ -281,7 +281,6 @@ def run(args):
     # Update goal
     time_since = current_time - previous_detection_time
     if time_since > 0.3:
-        print('Start to find goal, laser_coordinates=',laser.coordinates)
         detector.find_goal(laser.coordinates)
         # controller.reset()
         previous_detection_time = current_time
@@ -300,7 +299,6 @@ def run(args):
     #   publisher.publish(stop_msg)
     #   rate_limiter.sleep()
     #   continue
-    print('goal:',detector.goal_pose,'obs:',detector.obstacle)
     time_since = current_time - previous_publish_time
     if time_since > 0.2:
       u, w = navigation_method(detector.obstacles, goal_position, controller)
