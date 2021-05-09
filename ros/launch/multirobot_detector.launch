@@ -1,7 +1,5 @@
 <!-- 
-    1. call multi_tur_slam.launch(call gmapping)
-    2. call slam.launch to detect obstacles
-    3. call multirobot_map_merge to merge map
+    1. call rviz and 
  -->
 <launch>
   <arg name="first_tb3"  default="tb3_0"/>
